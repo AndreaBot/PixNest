@@ -26,6 +26,8 @@ struct K {
     
     struct Icons {
         static let search = "magnifyingglass.circle"
+        static let prevPage = "chevron.left.circle.fill"
+        static let nextPage = "chevron.right.circle.fill"
     }
     
     struct ImageSearch {

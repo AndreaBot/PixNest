@@ -10,8 +10,8 @@ import Foundation
 struct SearchResult: Codable {
     
     let total: Int
-    let total_pages: Int
-    let results: [Result]
+    var total_pages: Int
+    var results: [Result]
 }
 
 struct Result: Codable {
