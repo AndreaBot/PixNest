@@ -15,11 +15,18 @@ struct ResultsView: View {
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images)
+                if searchViewModel.searchResults.results.isEmpty {
+                    ContentUnavailableView.search
+                    
+                } else {
+                    
+                    ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images)
+                    
+                    Spacer()
+                    
+                    PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.total_pages)
+                }
                 
-                Spacer()
-                
-                PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.total_pages)
             }
             .navigationTitle(searchViewModel.searchKeyword.capitalized)
             .navigationBarTitleDisplayMode(.inline)
