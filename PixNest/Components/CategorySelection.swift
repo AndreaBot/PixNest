@@ -12,12 +12,11 @@ struct CategorySelection: View {
     @Binding var searchViewModel: SearchViewModel
     let screenWidth: CGFloat
     
-    
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: screenWidth/3))]) {
             ForEach(K.General.allCategories.indices, id: \.self) { index in
                 Button {
-                    searchViewModel.searchKeyword = K.General.allCategories[index].name
+                    searchViewModel.searchKeyword = K.General.allCategories[index].keyword
                 } label: {
                     ZStack {
                         Image(K.General.allCategories[index].asset)
@@ -25,7 +24,6 @@ struct CategorySelection: View {
                             .scaledToFill()
                             .frame(width: screenWidth / 2.5, height: screenWidth / 4)
                             .clipShape(RoundedRectangle(cornerRadius: 15))
-                        
                         
                         Text(K.General.allCategories[index].name)
                             .font(.title)

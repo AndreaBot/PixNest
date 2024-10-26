@@ -10,5 +10,6 @@ import DeveloperToolsSupport
 
 struct MyResource {
     let name: String
+    let keyword: String
     let asset: ImageResource
 }

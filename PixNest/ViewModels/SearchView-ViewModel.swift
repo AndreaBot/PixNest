@@ -12,12 +12,11 @@ final class SearchViewModel {
     
     var searchKeyword = ""
     var pageNumber = 1
-    var searchResults = [Result]()
+    var searchResults = SearchResult(total: 0, total_pages: 0, results: [])
     
-    func fetchImages(searchKey: String) async -> ([Result], Int) {
+    func fetchImages(searchKey: String) async -> SearchResult {
         let baseUrl = "https://api.unsplash.com/search/photos/?orientation=portrait"
-        var results = [Result]()
-        var totalPages = 0
+        var results = SearchResult(total: 0, total_pages: 0, results: [])
         
         guard let encodedText = searchKey.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             fatalError("The search keywords could not be encoded")
@@ -30,12 +29,11 @@ final class SearchViewModel {
         do {
             let (data, _) = try await URLSession.shared.data(from: searchUrl)
             if let decodedData = try? JSONDecoder().decode(SearchResult.self, from: data) {
-                results = decodedData.results
-                totalPages = decodedData.total_pages
+                results = decodedData
             }
         } catch {
             print(error.localizedDescription)
     }
-        return (results, totalPages)
+        return results
     }
 }
