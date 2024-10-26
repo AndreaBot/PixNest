@@ -16,13 +16,15 @@ struct SearchView: View {
         NavigationStack(path: $path) {
             GeometryReader { proxy in
                 VStack {
-                    SearchBar(searchKeyword: $searchViewModel.searchKeyword) { keyword in
-                        searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: keyword)
+                    SearchBar(searchKeyword: $searchViewModel.searchKeyword) {
+                        path.append(.resultsView)
                     }
                     
                     Spacer()
                     
-                    CategorySelection(searchViewModel: $searchViewModel, screenWidth: proxy.size.width)
+                    CategorySelection(searchViewModel: $searchViewModel, screenWidth: proxy.size.width) {
+                        path.append(.resultsView)
+                    }
                     
                     Spacer()
                 }
@@ -33,9 +35,6 @@ struct SearchView: View {
                     case .resultsView :
                         ResultsView(searchViewModel: $searchViewModel)
                     }
-                }
-                .onChange(of: searchViewModel.searchKeyword) { oldValue, newValue in
-                    path.append(.resultsView)
                 }
             }
         }

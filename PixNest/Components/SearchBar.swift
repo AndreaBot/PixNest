@@ -10,25 +10,27 @@ import SwiftUI
 struct SearchBar: View {
     
     @Binding var searchKeyword: String
-    let searchAction: (String) async -> Void
+    let searchAction: () -> Void
     
     var body: some View {
         HStack {
             TextField("Search", text: $searchKeyword, prompt: Text("What are you looking for?"))
             Button {
-                Task {
-                  await searchAction(searchKeyword)
-                }
+                searchAction()
             } label: {
                 Image(systemName: K.Icons.search)
                     .font(.title)
             }
         }
+        .onSubmit {
+            searchAction()
+        }
     }
 }
 
 #Preview {
-    SearchBar(searchKeyword: .constant("keyword")) { keyword in
-        print(keyword)
+    SearchBar(searchKeyword: .constant("keyword")) {
+        print("Navigate to ResultsView")
     }
+    
 }
