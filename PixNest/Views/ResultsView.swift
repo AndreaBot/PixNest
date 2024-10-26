@@ -16,7 +16,6 @@ struct ResultsView: View {
         GeometryReader { proxy in
             VStack {
                 ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images)
-                    .padding(.horizontal)
                 
                 Spacer()
                 
@@ -25,13 +24,23 @@ struct ResultsView: View {
             .navigationTitle(searchViewModel.searchKeyword.capitalized)
             .navigationBarTitleDisplayMode(.inline)
             .task {
-                searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
-                for result in searchViewModel.searchResults.results {
-                    if let imageData =  await searchViewModel.loadImage(urlString: result.urls.small) {
-                        let UIImage = UIImage(data: imageData)
-                        images.append(Image(uiImage: UIImage!))
-                    }
+                await loadImages()
+            }
+            .onChange(of: searchViewModel.pageNumber) { oldValue, newValue in
+                Task {
+                    await loadImages()
                 }
+            }
+        }
+    }
+    
+    func loadImages() async {
+        images = [Image]()
+        searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
+        for result in searchViewModel.searchResults.results {
+            if let imageData =  await searchViewModel.loadImage(urlString: result.urls.small) {
+                let UIImage = UIImage(data: imageData)
+                images.append(Image(uiImage: UIImage!))
             }
         }
     }

@@ -26,6 +26,7 @@ struct ImagesGrid: View {
                     }
                 }
             }
+            .padding(.horizontal)
         }
     }
 }

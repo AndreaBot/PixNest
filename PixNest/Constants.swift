@@ -17,7 +17,7 @@ struct K {
             MyResource(name: "Cities", keyword: "city", asset: .cities),
             MyResource(name: "Animals", keyword: "animal", asset: .animals),
             MyResource(name: "Nature", keyword: "nature", asset: .nature),
-            MyResource(name: "Space", keyword: "space", asset: .space),
+            MyResource(name: "Space", keyword: "universe", asset: .space),
             MyResource(name: "Abstract", keyword: "abstract", asset: .abstract),
             MyResource(name: "B&W", keyword: "black and white", asset: .B_W),
             MyResource(name: "Sketches", keyword: "illustration", asset: .illustrations)
