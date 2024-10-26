@@ -27,4 +27,8 @@ struct K {
     struct Icons {
         static let search = "magnifyingglass.circle"
     }
+    
+    struct ImageSearch {
+        static let apiKey = "GKREyJQ1MCESHa8rBNmBC_70ZcKWVOsmeU1U--edAv4"
+    }
 }

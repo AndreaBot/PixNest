@@ -16,7 +16,7 @@ struct SearchView: View {
             GeometryReader { proxy in
                 VStack {
                     SearchBar(searchKeyword: $searchViewModel.searchKeyword) { keyword in
-                        print(keyword)
+                        await searchViewModel.fetchImages(searchKey: keyword)
                     }
                     
                     Spacer()
@@ -27,9 +27,6 @@ struct SearchView: View {
                 }
                 .padding(20)
                 .navigationTitle(K.General.appName)
-                .onChange(of: searchViewModel.searchKeyword) { oldValue, newValue in
-                    print(newValue)
-                }
             }
         }
     }
