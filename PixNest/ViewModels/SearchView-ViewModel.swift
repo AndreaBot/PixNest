@@ -16,6 +16,8 @@ final class SearchViewModel {
     var pageNumber = 1
     var searchResults = SearchResult(total: 0, total_pages: 0, results: [])
     
+    var selectedImage: Result?
+    
     func fetchImages(searchKey: String) async -> SearchResult {
         let baseUrl = "https://api.unsplash.com/search/photos/?orientation=portrait"
         var results = SearchResult(total: 0, total_pages: 0, results: [])

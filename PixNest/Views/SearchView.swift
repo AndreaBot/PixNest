@@ -36,7 +36,12 @@ struct SearchView: View {
                 .navigationDestination(for: NavigationScreens.self) { screen in
                     switch screen {
                     case .resultsView :
-                        ResultsView(searchViewModel: $searchViewModel)
+                        ResultsView(searchViewModel: $searchViewModel, path: $path)
+                    case .fullscreen:
+                        if let selectedImage = searchViewModel.selectedImage {
+                            FullscreenView(searchViewModel: $searchViewModel, imageResult: selectedImage)
+                        }
+                        
                     }
                 }
             }

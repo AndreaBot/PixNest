@@ -8,5 +8,5 @@
 import Foundation
 
 enum NavigationScreens {
-    case resultsView
+    case resultsView, fullscreen
 }

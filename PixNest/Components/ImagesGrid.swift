@@ -12,13 +12,15 @@ struct ImagesGrid: View {
     @Binding var searchViewModel: SearchViewModel
     let screen: CGSize
     @Binding var images: [Image]
+    let goToFullscreenView: () -> Void
     
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: screen.width/3))]) {
                 ForEach(images.indices, id: \.self) { index in
                     Button {
-                        
+                        searchViewModel.selectedImage = searchViewModel.searchResults.results[index]
+                        goToFullscreenView()
                     } label: {
                         images[index]
                             .resizable()
@@ -33,5 +35,7 @@ struct ImagesGrid: View {
 
 
 #Preview {
-    ImagesGrid(searchViewModel: .constant(SearchViewModel()), screen: CGSize(width: 600, height: 300), images: .constant([Image]()))
+    ImagesGrid(searchViewModel: .constant(SearchViewModel()), screen: CGSize(width: 600, height: 300), images: .constant([Image]())) {
+        print("navigate to fullscreen")
+    }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct ResultsView: View {
     
     @Binding var searchViewModel: SearchViewModel
+    @Binding var path: [NavigationScreens]
     @State private var images = [Image]()
     
     var body: some View {
@@ -20,7 +21,9 @@ struct ResultsView: View {
                     
                 } else {
                     
-                    ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images)
+                    ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images) {
+                        path.append(.fullscreen)
+                    }
                     
                     Spacer()
                     
