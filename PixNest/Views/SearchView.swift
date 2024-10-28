@@ -32,6 +32,7 @@ struct SearchView: View {
                 .navigationTitle(K.General.appName)
                 .onAppear {
                     searchViewModel.searchKeyword = ""
+                    searchViewModel.pageNumber = 1
                 }
                 .navigationDestination(for: NavigationScreens.self) { screen in
                     switch screen {
