@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FullscreenView: View {
     
+    @Environment(\.openURL) var openURL
     @Binding var searchViewModel: SearchViewModel
     
     let imageResult: Result
@@ -27,7 +28,7 @@ struct FullscreenView: View {
             
             Spacer()
             
-            PhotoCreditsBar(photographerProfilePicture: photographerProfilePicture, photographernName: imageResult.user.name)
+            PhotoCreditsBar(photographerProfilePicture: photographerProfilePicture, photographernName: imageResult.user.name, photographerPageURL: imageResult.user.links.html, openURLAction: openURL)
         }
         .padding(.horizontal)
         .task {

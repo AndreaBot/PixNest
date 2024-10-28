@@ -11,20 +11,34 @@ struct PhotoCreditsBar: View {
     
     let photographerProfilePicture: UIImage
     let photographernName: String
+    let photographerPageURL: String
+    let openURLAction: OpenURLAction
+    
     
     var body: some View {
         HStack {
-            Image(uiImage: photographerProfilePicture)
-                .font(.title)
-                .clipShape(Circle())
-            
-            HStack(alignment: .bottom) {
-                Text(photographernName)
-                    .underline()
-                    .font(.title3)
+            Button {
+                if let url = URL(string: photographerPageURL) {
+                    openURLAction(url)
+                }
+            } label: {
+                HStack {
+                    HStack {
+                        Image(uiImage: photographerProfilePicture)
+                            .font(.title)
+                            .clipShape(Circle())
+                        
+                        VStack(alignment: .leading) {
+                            Text(photographernName)
+                                .underline()
+                                .font(.title3)
+                            
+                            Text("Unsplash.com")
+                                .font(.caption)
+                        }
+                    }
+                }
                 Spacer()
-                Text("Unsplash.com")
-                    .font(.subheadline)
             }
         }
     }
