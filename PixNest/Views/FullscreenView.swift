@@ -14,6 +14,7 @@ struct FullscreenView: View {
     
     let imageResult: Result
     
+    @State private var imageDownloader = ImageDownloader()
     @State private var photo = UIImage()
     @State private var photographerProfilePicture = UIImage()
     
@@ -39,8 +40,26 @@ struct FullscreenView: View {
                 photo = UIImage(data: photoImageData)!
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("Download") {
+                    imageDownloader.download(image: photo)
+                }
+            }
+        }
+        .onChange(of: imageDownloader.downloadIsSuccessful) { oldValue, newValue in
+            if newValue == true {
+                imageDownloader.triggerDownloadCount(imageResult.links.download_location)
+            }
+        }
+        .alert(imageDownloader.downloadAlertTitle, isPresented: $imageDownloader.showingDownloadAlert) {
+            Button("OK") {}
+        } message: {
+            Text(imageDownloader.downloadAlertMessage)
+        }
     }
 }
+
 
 //#Preview {
 //    FullscreenView()
