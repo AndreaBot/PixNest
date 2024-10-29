@@ -48,11 +48,35 @@ struct ResultsView: View {
                 await loadImages()
             }
         }
+        .onChange(of: searchViewModel.sortType) { oldValue, newValue in
+            if searchViewModel.pageNumber > 1 {
+                searchViewModel.pageNumber = 1
+            } else {
+                Task {
+                    await loadImages()
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    VStack {
+                        Picker("sort by", selection: $searchViewModel.sortType) {
+                            ForEach(SortType.allCases, id:\.self) {
+                                Text("\($0.rawValue) first")
+                            }
+                        }
+                    }
+                }  label: {
+                    Image(systemName: K.Icons.sort)
+                }
+            }
+        }
     }
     
     func loadImages() async {
         searchViewModel.hasLoadedImages = false
-        images = [Image]()
+        images = []
         searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
         for result in searchViewModel.searchResults.results {
             if let imageData =  await searchViewModel.loadImage(urlString: result.urls.small) {

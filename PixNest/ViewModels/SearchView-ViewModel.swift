@@ -14,6 +14,7 @@ final class SearchViewModel {
     
     var searchKeyword = ""
     var pageNumber = 1
+    var sortType: SortType = .relevant
     var searchResults = SearchResult(total: 0, total_pages: 0, results: [])
     
     var hasLoadedImages = false
@@ -28,7 +29,7 @@ final class SearchViewModel {
             fatalError("The search keywords could not be encoded")
         }
         
-        guard let searchUrl = URL(string: "\(baseUrl)&query=\(encodedText)&page=\(pageNumber)&per_page=20&client_id=\(K.ImageSearch.apiKey)") else {
+        guard let searchUrl = URL(string: "\(baseUrl)&query=\(encodedText)&page=\(pageNumber)&per_page=20&order_by=\(sortType.rawValue)&client_id=\(K.ImageSearch.apiKey)") else {
             fatalError("Invalid URL")
         }
         
