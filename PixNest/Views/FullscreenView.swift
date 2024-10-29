@@ -20,30 +20,33 @@ struct FullscreenView: View {
     
     
     var body: some View {
-        VStack {
-            Spacer()
-            
-            Image(uiImage: photo)
-                .resizable()
-                .scaledToFit()
-            
-            Spacer()
-            
-            PhotoCreditsBar(photographerProfilePicture: photographerProfilePicture, photographernName: imageResult.user.name, photographerPageURL: imageResult.user.links.html, openURLAction: openURL)
+        Group {
+            if !searchViewModel.hasLoadedImages {
+                LoadingView()
+            } else {
+                VStack {
+                    Spacer()
+                    
+                    Image(uiImage: photo)
+                        .resizable()
+                        .scaledToFit()
+                    
+                    Spacer()
+                    
+                    PhotoCreditsBar(photographerProfilePicture: photographerProfilePicture, photographernName: imageResult.user.name, photographerPageURL: imageResult.user.links.html, openURLAction: openURL)
+                }
+                .padding(.horizontal)
+            }
         }
-        .padding(.horizontal)
         .task {
-            if let photographerImageData = await searchViewModel.loadImage(urlString: imageResult.user.profile_image.medium) {
-                photographerProfilePicture = UIImage(data: photographerImageData)!
-            }
-            if let photoImageData = await searchViewModel.loadImage(urlString: imageResult.urls.full) {
-                photo = UIImage(data: photoImageData)!
-            }
+            await loadImages()
         }
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button("Download") {
-                    imageDownloader.download(image: photo)
+            if searchViewModel.hasLoadedImages {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Download") {
+                        imageDownloader.download(image: photo)
+                    }
                 }
             }
         }
@@ -57,6 +60,21 @@ struct FullscreenView: View {
         } message: {
             Text(imageDownloader.downloadAlertMessage)
         }
+    }
+    
+    func loadImages() async {
+        searchViewModel.hasLoadedImages = false
+        async let profileImageData = searchViewModel.loadImage(urlString: imageResult.user.profile_image.medium)
+        async let mainImageData = searchViewModel.loadImage(urlString: imageResult.urls.full)
+        
+        if let profileData = await profileImageData, let profileImage = UIImage(data: profileData) {
+            photographerProfilePicture = profileImage
+        }
+        
+        if let mainData = await mainImageData, let mainImage = UIImage(data: mainData) {
+            photo = mainImage
+        }
+        searchViewModel.hasLoadedImages = true
     }
 }
 
