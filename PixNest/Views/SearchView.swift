@@ -14,6 +14,8 @@ struct SearchView: View {
     @State private var searchViewModel = SearchViewModel()
     @State private var path = [NavigationScreens]()
     
+    @State private var showingFavs = false
+    
     var body: some View {
         NavigationStack(path: $path) {
             GeometryReader { proxy in
@@ -46,6 +48,18 @@ struct SearchView: View {
                         }
                         
                     }
+                }
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button {
+                            showingFavs.toggle()
+                        } label: {
+                            Image(systemName: K.Icons.favourites)
+                        }
+                    }
+                }
+                .fullScreenCover(isPresented: $showingFavs) {
+                    FavouritesView(searchViewModel: $searchViewModel)
                 }
             }
         }

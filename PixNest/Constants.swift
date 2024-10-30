@@ -29,6 +29,8 @@ struct K {
         static let prevPage = "chevron.left.circle.fill"
         static let nextPage = "chevron.right.circle.fill"
         static let sort = "arrow.up.arrow.down"
+        static let favourites = "heart.fill"
+        static let goBack = "chevron.left"
     }
     
     struct ImageSearch {
