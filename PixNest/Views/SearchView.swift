@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SearchView: View {
     
+    @Environment(\.coreDataManager) var coreDataManager
+    
     @State private var searchViewModel = SearchViewModel()
     @State private var path = [NavigationScreens]()
     

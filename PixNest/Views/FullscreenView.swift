@@ -10,6 +10,8 @@ import SwiftUI
 struct FullscreenView: View {
     
     @Environment(\.openURL) var openURL
+    @Environment(\.coreDataManager) var coreDataManager
+    
     @Binding var searchViewModel: SearchViewModel
     
     let imageResult: Result
@@ -44,8 +46,13 @@ struct FullscreenView: View {
         .toolbar {
             if searchViewModel.hasLoadedImages {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Download") {
-                        imageDownloader.download(image: photo)
+                    HStack {
+                        Button("Save") {
+                            coreDataManager.createNewEntity(lowResLink: imageResult.urls.small, highResLink: imageResult.urls.full)
+                        }
+                        Button("Download") {
+                            imageDownloader.download(image: photo)
+                        }
                     }
                 }
             }
