@@ -9,12 +9,8 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @Environment(\.coreDataManager) var coreDataManager
-    
-    @State private var searchViewModel = SearchViewModel()
+    @Binding var searchViewModel: SearchViewModel
     @State private var path = [NavigationScreens]()
-    
-    @State private var showingFavs = false
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -49,23 +45,11 @@ struct SearchView: View {
                         
                     }
                 }
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            showingFavs.toggle()
-                        } label: {
-                            Image(systemName: K.Icons.favourites)
-                        }
-                    }
-                }
-                .fullScreenCover(isPresented: $showingFavs) {
-                    FavouritesView(searchViewModel: $searchViewModel)
-                }
             }
         }
     }
 }
 
 #Preview {
-    SearchView()
+    SearchView(searchViewModel: .constant(SearchViewModel()))
 }

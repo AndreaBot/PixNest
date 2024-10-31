@@ -11,15 +11,9 @@ import CoreData
 @main
 struct PixNestApp: App {
     
-   // @StateObject var coreDataManger = CoreDataManager()
-    
-  
-    
     var body: some Scene {
         WindowGroup {
-            SearchView()
-               
-               // .environment(\.managedObjectContext, coreDataManger.container.viewContext)
+            HomeScreen()
         }
     }
 }

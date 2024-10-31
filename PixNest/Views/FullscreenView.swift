@@ -37,7 +37,7 @@ struct FullscreenView: View {
                     
                     PhotoCreditsBar(photographerProfilePicture: photographerProfilePicture, photographernName: imageResult.user.name, photographerPageURL: imageResult.user.links.html, openURLAction: openURL)
                 }
-                .padding(.horizontal)
+                .padding()
             }
         }
         .task {

@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import SwiftUICore
-import UIKit
 
 @Observable
 final class SearchViewModel {
