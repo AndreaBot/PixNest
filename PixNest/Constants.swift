@@ -31,6 +31,7 @@ struct K {
         static let sort = "arrow.up.arrow.down"
         static let pixnest = "photo.on.rectangle.angled"
         static let favourites = "heart.fill"
+        static let noFavourites = "heart.slash.fill"
     }
     
     struct ImageSearch {

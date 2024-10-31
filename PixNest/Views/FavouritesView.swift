@@ -17,11 +17,17 @@ struct FavouritesView: View {
     var body: some View {
         NavigationStack {
             GeometryReader { proxy in
-                if !searchViewModel.hasLoadedImages {
-                    LoadingView()
+                if coreDataManager.savedPhotos.isEmpty {
+                    ContentUnavailableView("No saved photos",
+                                           systemImage: K.Icons.noFavourites,
+                                           description: Text("Get busy exploring our app!"))
                 } else {
-                    ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images) { _ in
-                        print("tapped!")
+                    if !searchViewModel.hasLoadedImages {
+                        LoadingView()
+                    } else {
+                        ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images) { _ in
+                            print("tapped!")
+                        }
                     }
                 }
             }
@@ -34,7 +40,6 @@ struct FavouritesView: View {
     
     func loadImages() async {
         searchViewModel.hasLoadedImages = false
-//        coreDataManager.loadData()
         images = []
         for photo in coreDataManager.savedPhotos {
             guard let photoUrl = photo.lowResUrl else {
