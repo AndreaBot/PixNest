@@ -43,6 +43,7 @@ final class CoreDataManager {
         newEntity.lowResUrl = lowResLink
         newEntity.highResUrl = highResLink
         saveData()
+        loadData()
     }
     
     func saveData() {

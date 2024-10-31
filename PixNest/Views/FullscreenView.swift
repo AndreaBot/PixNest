@@ -47,9 +47,12 @@ struct FullscreenView: View {
             if searchViewModel.hasLoadedImages {
                 ToolbarItem(placement: .primaryAction) {
                     HStack {
-                        Button("Save") {
+                        Button("Add to my favourites") {
                             coreDataManager.createNewEntity(lowResLink: imageResult.urls.small, highResLink: imageResult.urls.full)
                         }
+                        .disabled(coreDataManager.savedPhotos.contains(where: { savedPhoto in
+                            savedPhoto.highResUrl == imageResult.urls.full
+                        }))
                         Button("Download") {
                             imageDownloader.download(image: photo)
                         }

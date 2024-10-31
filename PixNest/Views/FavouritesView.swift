@@ -34,7 +34,7 @@ struct FavouritesView: View {
     
     func loadImages() async {
         searchViewModel.hasLoadedImages = false
-        coreDataManager.loadData()
+//        coreDataManager.loadData()
         images = []
         for photo in coreDataManager.savedPhotos {
             guard let photoUrl = photo.lowResUrl else {
