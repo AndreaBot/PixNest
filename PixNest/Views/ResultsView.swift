@@ -25,7 +25,7 @@ struct ResultsView: View {
                             
                         } else {
                             
-                            ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images) { int in
+                            ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images, isShowingFavs: false) { int in
                                 if let int = int {
                                     searchViewModel.selectedImage = searchViewModel.searchResults.results[int]
                                     path.append(.fullscreen)

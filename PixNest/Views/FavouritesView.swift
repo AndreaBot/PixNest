@@ -25,7 +25,7 @@ struct FavouritesView: View {
                     if !searchViewModel.hasLoadedImages {
                         LoadingView()
                     } else {
-                        ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images) { _ in
+                        ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images, isShowingFavs: true) { _ in
                             print("tapped!")
                         }
                     }
