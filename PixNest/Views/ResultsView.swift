@@ -14,7 +14,8 @@ struct ResultsView: View {
     @State private var images = [UIImage]()
     
     var body: some View {
-        Group {
+        VStack {
+            Spacer()
             if !searchViewModel.hasLoadedImages {
                 LoadingView()
             } else {
@@ -32,15 +33,14 @@ struct ResultsView: View {
                             } downloadAction: { _ in
                                 return
                             }
-                            
-                            Spacer()
-                            
-                            PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.total_pages)
                         }
-                        
                     }
                 }
             }
+            Spacer()
+            
+            PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.total_pages)
+                .padding(.vertical)
         }
         .navigationTitle(searchViewModel.searchKeyword.capitalized)
         .navigationBarTitleDisplayMode(.inline)
@@ -86,13 +86,13 @@ struct ResultsView: View {
             if let imageData =  await searchViewModel.loadImage(urlString: result.urls.small) {
                 let UIImage = UIImage(data: imageData)
                 images.append(UIImage!)
-//                images.append(Image(uiImage: UIImage!))
+                //                images.append(Image(uiImage: UIImage!))
             }
         }
         searchViewModel.hasLoadedImages = true
     }
 }
 
-//#Preview {
-//    ResultsView(searchViewModel: .constant(SearchViewModel()))
-//}
+#Preview {
+    ResultsView(searchViewModel: .constant(SearchViewModel()), path: .constant([NavigationScreens]()))
+}
