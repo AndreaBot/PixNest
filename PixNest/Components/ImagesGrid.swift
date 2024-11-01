@@ -32,7 +32,7 @@ struct ImagesGrid: View {
                             selectedIndex = index
                             showingOverlay = true
                         } else {
-                                tapAction(index)
+                            tapAction(index)
                         }
                     } label: {
                         Image(uiImage:images[index])
@@ -41,10 +41,10 @@ struct ImagesGrid: View {
                             .overlay {
                                 if showingOverlay {
                                     if selectedIndex == index {
-                                        FavouritePhotoOverlay(selectedIndex: $selectedIndex, deleteAction: { _ in
+                                        FavouritePhotoOverlay(deleteAction: {
                                             deleteAction(selectedIndex)
-                                        }, downloadAction: { _ in
-                                          await downloadAction(selectedIndex)
+                                        }, downloadAction: {
+                                            await downloadAction(selectedIndex)
                                         })
                                         .padding()
                                     }

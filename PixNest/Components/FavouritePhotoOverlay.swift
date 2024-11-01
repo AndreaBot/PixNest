@@ -9,14 +9,13 @@ import SwiftUI
 
 struct FavouritePhotoOverlay: View {
     
-    @Binding var selectedIndex: Int
-    let deleteAction: (Int) -> Void
-    let downloadAction: (Int) async -> Void
+    let deleteAction: () -> Void
+    let downloadAction: () async -> Void
     
     var body: some View {
         VStack {
             Button {
-                deleteAction(selectedIndex)
+                deleteAction()
             } label: {
                 Image(systemName: K.Icons.noFavourites)
             }
@@ -25,7 +24,7 @@ struct FavouritePhotoOverlay: View {
             
             Button {
                 Task {
-                   await downloadAction(selectedIndex)
+                    await downloadAction()
                 }
             } label: {
                 Image(systemName: K.Icons.download)
@@ -41,5 +40,5 @@ struct FavouritePhotoOverlay: View {
 }
 
 #Preview {
-    FavouritePhotoOverlay(selectedIndex: .constant(0), deleteAction: {_ in }, downloadAction: {_ in })
+    FavouritePhotoOverlay(deleteAction: {}, downloadAction: {})
 }
