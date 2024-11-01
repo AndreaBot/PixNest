@@ -10,9 +10,12 @@ import SwiftUI
 struct FavouritesView: View {
     
     @Environment(\.coreDataManager) var coreDataManager
+    
     @Binding var searchViewModel: SearchViewModel
     
-    @State private var images: [Image] = []
+    @State private var imageDownloader = ImageDownloader()
+    @State private var images: [UIImage] = []
+    
     
     var body: some View {
         NavigationStack {
@@ -25,8 +28,17 @@ struct FavouritesView: View {
                     if !searchViewModel.hasLoadedImages {
                         LoadingView()
                     } else {
-                        ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images, isShowingFavs: true) { _ in
-                            print("tapped!")
+                        ImagesGrid(searchViewModel: $searchViewModel, images: $images, screen: proxy.size, isShowingFavs: true) { _ in
+                            return
+                        } deleteAction: { int in
+                            print("deleted at \(int)")
+                        } downloadAction: { int in
+                            guard let highResLink = coreDataManager.savedPhotos[int].highResUrl else {
+                                return
+                            }
+                            if let imageData = await searchViewModel.loadImage(urlString: highResLink ) {
+                                imageDownloader.download(image: UIImage(data: imageData)!)
+                            }
                         }
                     }
                 }
@@ -47,7 +59,8 @@ struct FavouritesView: View {
             }
             if let imageData = await searchViewModel.loadImage(urlString: photoUrl) {
                 let UIImage = UIImage(data: imageData)
-                images.append(Image(uiImage: UIImage!))
+                images.append(UIImage!)
+                //                images.append(Image(uiImage: UIImage!))
             }
         }
         searchViewModel.hasLoadedImages = true

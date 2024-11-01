@@ -10,13 +10,17 @@ import SwiftUI
 struct ImagesGrid: View {
     
     @Binding var searchViewModel: SearchViewModel
+    @Binding var images: [UIImage]
+    
     let screen: CGSize
-    @Binding var images: [Image]
     let isShowingFavs: Bool
-    let tapAction: (Int?) -> Void
+    
+    let tapAction: (Int) -> Void
+    let deleteAction: (Int) -> Void
+    let downloadAction: (Int) async -> Void
     
     @State private var showingOverlay = false
-    @State private var selectedIndex: Int?
+    @State private var selectedIndex = 0
     
     
     var body: some View {
@@ -26,22 +30,23 @@ struct ImagesGrid: View {
                     Button {
                         if isShowingFavs {
                             selectedIndex = index
-                            
                             showingOverlay = true
-                            
-                            
                         } else {
-                            tapAction(index)
+                                tapAction(index)
                         }
                     } label: {
-                        images[index]
+                        Image(uiImage:images[index])
                             .resizable()
                             .scaledToFit()
                             .overlay {
                                 if showingOverlay {
                                     if selectedIndex == index {
-                                        FavouritePhotoOverlay()
-                                            .padding()
+                                        FavouritePhotoOverlay(selectedIndex: $selectedIndex, deleteAction: { _ in
+                                            deleteAction(selectedIndex)
+                                        }, downloadAction: { _ in
+                                          await downloadAction(selectedIndex)
+                                        })
+                                        .padding()
                                     }
                                 }
                             }
@@ -55,7 +60,7 @@ struct ImagesGrid: View {
 
 
 #Preview {
-    ImagesGrid(searchViewModel: .constant(SearchViewModel()), screen: CGSize(width: 600, height: 300), images: .constant([Image]()), isShowingFavs: false) {_ in
+    ImagesGrid(searchViewModel: .constant(SearchViewModel()), images: .constant([UIImage]()), screen: CGSize(width: 600, height: 300), isShowingFavs: false, tapAction:  {_ in
         print("navigate to fullscreen")
-    }
+    }, deleteAction: {_ in }, downloadAction: {_ in })
 }

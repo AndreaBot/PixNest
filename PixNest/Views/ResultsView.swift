@@ -11,7 +11,7 @@ struct ResultsView: View {
     
     @Binding var searchViewModel: SearchViewModel
     @Binding var path: [NavigationScreens]
-    @State private var images = [Image]()
+    @State private var images = [UIImage]()
     
     var body: some View {
         Group {
@@ -24,12 +24,13 @@ struct ResultsView: View {
                             ContentUnavailableView.search
                             
                         } else {
-                            
-                            ImagesGrid(searchViewModel: $searchViewModel, screen: proxy.size, images: $images, isShowingFavs: false) { int in
-                                if let int = int {
-                                    searchViewModel.selectedImage = searchViewModel.searchResults.results[int]
-                                    path.append(.fullscreen)
-                                }
+                            ImagesGrid(searchViewModel: $searchViewModel, images: $images, screen: proxy.size, isShowingFavs: false) { int in
+                                searchViewModel.selectedImage = searchViewModel.searchResults.results[int]
+                                path.append(.fullscreen)
+                            } deleteAction: { _ in
+                                return
+                            } downloadAction: { _ in
+                                return
                             }
                             
                             Spacer()
@@ -84,7 +85,8 @@ struct ResultsView: View {
         for result in searchViewModel.searchResults.results {
             if let imageData =  await searchViewModel.loadImage(urlString: result.urls.small) {
                 let UIImage = UIImage(data: imageData)
-                images.append(Image(uiImage: UIImage!))
+                images.append(UIImage!)
+//                images.append(Image(uiImage: UIImage!))
             }
         }
         searchViewModel.hasLoadedImages = true
