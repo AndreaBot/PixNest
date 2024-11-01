@@ -53,6 +53,16 @@ final class CoreDataManager {
             print(error.localizedDescription)
         }
     }
+    
+    func deleteData(index: Int) {
+        if let imageToDelete = savedPhotos.first(where: { photo in
+            photo.id == savedPhotos[index].id
+        }) {
+            container.viewContext.delete(imageToDelete)
+            saveData()
+            loadData()
+        }
+    }
 }
 
 

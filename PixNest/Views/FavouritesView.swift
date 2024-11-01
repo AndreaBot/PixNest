@@ -31,7 +31,7 @@ struct FavouritesView: View {
                         ImagesGrid(searchViewModel: $searchViewModel, images: $images, screen: proxy.size, isShowingFavs: true) { _ in
                             return
                         } deleteAction: { int in
-                            print("deleted at \(int)")
+                            coreDataManager.deleteData(index: int)
                         } downloadAction: { int in
                             guard let highResLink = coreDataManager.savedPhotos[int].highResUrl else {
                                 return
@@ -48,6 +48,11 @@ struct FavouritesView: View {
         .task {
             await loadImages()
         }
+        .onChange(of: coreDataManager.savedPhotos) { _, _ in
+            Task {
+                await loadImages()
+            }
+        }
     }
     
     func loadImages() async {
@@ -60,7 +65,6 @@ struct FavouritesView: View {
             if let imageData = await searchViewModel.loadImage(urlString: photoUrl) {
                 let UIImage = UIImage(data: imageData)
                 images.append(UIImage!)
-                //                images.append(Image(uiImage: UIImage!))
             }
         }
         searchViewModel.hasLoadedImages = true

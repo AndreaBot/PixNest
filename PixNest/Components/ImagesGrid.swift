@@ -20,7 +20,7 @@ struct ImagesGrid: View {
     let downloadAction: (Int) async -> Void
     
     @State private var showingOverlay = false
-    @State private var selectedIndex = 0
+    @State private var selectedIndex: Int?
     
     
     var body: some View {
@@ -40,13 +40,16 @@ struct ImagesGrid: View {
                             .scaledToFit()
                             .overlay {
                                 if showingOverlay {
-                                    if selectedIndex == index {
-                                        FavouritePhotoOverlay(deleteAction: {
-                                            deleteAction(selectedIndex)
-                                        }, downloadAction: {
-                                            await downloadAction(selectedIndex)
-                                        })
-                                        .padding()
+                                    if let selectedIndex = selectedIndex {
+                                        if selectedIndex == index {
+                                            FavouritePhotoOverlay(deleteAction: {
+                                                deleteAction(selectedIndex)
+                                                self.selectedIndex = nil
+                                            }, downloadAction: {
+                                                await downloadAction(selectedIndex)
+                                            })
+                                            .padding()
+                                        }
                                     }
                                 }
                             }
