@@ -11,11 +11,17 @@ import UIKit
 @Observable
 class ImageDownloader: NSObject {
     
+    var alertsManager: AlertsManager?
+    
     var showingDownloadAlert = false
     var downloadAlertTitle = ""
     var downloadAlertMessage = ""
     
     var downloadIsSuccessful = false
+    
+    init(alertsManager: AlertsManager? = nil) {
+        self.alertsManager = alertsManager
+    }
     
     func triggerDownloadCount(_ URLString: String) {
         guard let downloadLocation = URL(string: "\(URLString)&client_id=\(K.ImageSearch.apiKey)") else {
@@ -30,14 +36,10 @@ class ImageDownloader: NSObject {
     
     @objc func saveImage(_ image: UIImage, error: Error?, context: UnsafeMutableRawPointer?) {
         if let error = error {
-            downloadAlertTitle = "❌ Oops..."
-            downloadAlertMessage = ("Error saving image: \(error)")
-            showingDownloadAlert = true
+            alertsManager?.showError(error)
         } else {
             downloadIsSuccessful = true
-            downloadAlertTitle = "✅ Success!"
-            downloadAlertMessage = ("Image successfully saved to your Photos")
-            showingDownloadAlert = true
+            alertsManager?.showDownloadConfirmation()
         }
     }
 }

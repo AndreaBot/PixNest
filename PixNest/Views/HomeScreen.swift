@@ -9,9 +9,7 @@ import SwiftUI
 
 struct HomeScreen: View {
     
-    @Environment(\.coreDataManager) var coreDataManager
     @State private var searchViewModel = SearchViewModel()
-    
     
     var body: some View {
         TabView {
@@ -24,9 +22,6 @@ struct HomeScreen: View {
                 .tabItem {
                     Label("My Favourites", systemImage: K.Icons.favourites)
                 }
-        }
-        .onAppear {
-            coreDataManager.loadData()
         }
     }
 }

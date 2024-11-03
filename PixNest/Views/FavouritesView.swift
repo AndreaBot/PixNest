@@ -9,11 +9,13 @@ import SwiftUI
 
 struct FavouritesView: View {
     
-    @Environment(\.coreDataManager) var coreDataManager
+    @EnvironmentObject var coreDataManager: CoreDataManager
     
     @Binding var searchViewModel: SearchViewModel
     
     @State private var imageDownloader = ImageDownloader()
+    @State private var alertsManager = AlertsManager()
+    
     @State private var images: [UIImage] = []
     
     
@@ -45,6 +47,9 @@ struct FavouritesView: View {
             }
             .navigationTitle("My favourites")
         }
+        .onAppear {
+            imageDownloader.alertsManager = alertsManager
+        }
         .task {
             await loadImages()
         }
@@ -52,6 +57,11 @@ struct FavouritesView: View {
             Task {
                 await loadImages()
             }
+        }
+        .alert(alertsManager.alertTitle, isPresented: $alertsManager.isShowingAlert) {
+            Button("OK") {}
+        } message: {
+            Text(alertsManager.alertMessage)
         }
     }
     

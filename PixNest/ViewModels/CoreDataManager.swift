@@ -8,22 +8,20 @@
 import CoreData
 import Foundation
 
-@Observable
-final class CoreDataManager {
-    
-    static let shared = CoreDataManager()
+
+final class CoreDataManager: ObservableObject {
     
     let container: NSPersistentContainer
-    var savedPhotos: [SavedPhoto] = []
+    @Published var alertsManager: AlertsManager?
+    @Published var savedPhotos: [SavedPhoto] = []
     
-    private init() {
+    init() {
         container = NSPersistentContainer(name: "SavedPhoto")
         container.loadPersistentStores { description, error in
             if let error = error {
                 print("Could not load persistent store: \(error.localizedDescription)")
             } else {
                 print("Persistent store successfully loaded!")
-                self.loadData()
             }
         }
     }
@@ -43,7 +41,7 @@ final class CoreDataManager {
         newEntity.lowResUrl = lowResLink
         newEntity.highResUrl = highResLink
         saveData()
-        loadData()
+        alertsManager?.showAddingToFavouritesConfirmation()
     }
     
     func saveData() {

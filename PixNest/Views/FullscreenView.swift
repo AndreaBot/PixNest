@@ -10,7 +10,7 @@ import SwiftUI
 struct FullscreenView: View {
     
     @Environment(\.openURL) var openURL
-    @Environment(\.coreDataManager) var coreDataManager
+    @EnvironmentObject var coreDataManager: CoreDataManager
     
     @Binding var searchViewModel: SearchViewModel
     
@@ -19,6 +19,8 @@ struct FullscreenView: View {
     @State private var imageDownloader = ImageDownloader()
     @State private var photo = UIImage()
     @State private var photographerProfilePicture = UIImage()
+    
+    @State private var alertsManager = AlertsManager()
     
     
     var body: some View {
@@ -39,6 +41,10 @@ struct FullscreenView: View {
                 }
                 .padding()
             }
+        }
+        .onAppear {
+            imageDownloader.alertsManager = alertsManager
+            coreDataManager.alertsManager = self.alertsManager
         }
         .task {
             await loadImages()
@@ -63,12 +69,17 @@ struct FullscreenView: View {
         .onChange(of: imageDownloader.downloadIsSuccessful) { oldValue, newValue in
             if newValue == true {
                 imageDownloader.triggerDownloadCount(imageResult.links.download_location)
+                imageDownloader.downloadIsSuccessful = false
             }
         }
-        .alert(imageDownloader.downloadAlertTitle, isPresented: $imageDownloader.showingDownloadAlert) {
-            Button("OK") {}
+        .alert(alertsManager.alertTitle, isPresented: $alertsManager.isShowingAlert) {
+            Button("OK") {
+                if alertsManager.triggerType == .coreDataManager {
+                    coreDataManager.loadData()
+                }
+            }
         } message: {
-            Text(imageDownloader.downloadAlertMessage)
+            Text(alertsManager.alertMessage)
         }
     }
     

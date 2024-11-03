@@ -11,9 +11,15 @@ import CoreData
 @main
 struct PixNestApp: App {
     
+    @StateObject var coreDataManager = CoreDataManager()
+    
     var body: some Scene {
         WindowGroup {
             HomeScreen()
+                .environmentObject(coreDataManager)
+                .onAppear {
+                    coreDataManager.loadData()
+                }
         }
     }
 }
