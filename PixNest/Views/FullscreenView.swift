@@ -39,6 +39,7 @@ struct FullscreenView: View {
                     Image(uiImage: photo)
                         .resizable()
                         .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
                     
                     Spacer()
                     
@@ -65,7 +66,7 @@ struct FullscreenView: View {
                             coreDataManager.createNewEntity(lowResLink: imageResult.urls.small, highResLink: imageResult.urls.full)
                         }
                         .disabled(imageAlreadyInFavourites)
-                       
+                        
                     }
                 }
             }

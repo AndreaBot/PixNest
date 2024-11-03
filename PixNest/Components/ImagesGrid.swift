@@ -38,6 +38,7 @@ struct ImagesGrid: View {
                         Image(uiImage:images[index])
                             .resizable()
                             .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                             .overlay {
                                 if showingOverlay {
                                     if let selectedIndex = selectedIndex {
