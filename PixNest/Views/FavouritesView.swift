@@ -28,7 +28,9 @@ struct FavouritesView: View {
                                            description: Text("Get busy exploring our app!"))
                 } else {
                     if !searchViewModel.hasLoadedImages {
+                        Spacer()
                         LoadingView()
+                        Spacer()
                     } else {
                         ImagesGrid(searchViewModel: $searchViewModel, images: $images, screen: proxy.size, isShowingFavs: true) { _ in
                             return
@@ -53,11 +55,11 @@ struct FavouritesView: View {
         .task {
             await loadImages()
         }
-//        .onChange(of: coreDataManager.savedPhotos) { _, _ in
-//            Task {
-//                await loadImages()
-//            }
-//        }
+        .onChange(of: coreDataManager.savedPhotos) { _, _ in
+            Task {
+                await loadImages()
+            }
+        }
         .alert(alertsManager.alertTitle, isPresented: $alertsManager.isShowingAlert) {
             Button("OK") {}
         } message: {

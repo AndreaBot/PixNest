@@ -16,10 +16,11 @@ struct SearchView: View {
         NavigationStack(path: $path) {
             GeometryReader { proxy in
                 VStack {
+                    Spacer()
+                    
                     SearchBar(searchKeyword: $searchViewModel.searchKeyword) {
                         path.append(.resultsView)
                     }
-                    
                     Spacer()
                     
                     CategorySelection(searchViewModel: $searchViewModel, screenWidth: proxy.size.width) {

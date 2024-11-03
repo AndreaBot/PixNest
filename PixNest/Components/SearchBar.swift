@@ -15,17 +15,25 @@ struct SearchBar: View {
     var body: some View {
         HStack {
             TextField("Search", text: $searchKeyword, prompt: Text("What are you looking for?"))
+                .padding(10)
+                .background(.background)
+                .clipShape(Capsule())
+            
             Button {
                 guard !searchKeyword.isEmpty else { return }
                 searchAction()
             } label: {
                 Image(systemName: K.Icons.search)
-                    .font(.title)
+                    .font(.largeTitle)
+                    .foregroundStyle(.background)
             }
         }
         .onSubmit {
             searchAction()
         }
+        .padding(5)
+        .background(.accent)
+        .clipShape(Capsule())
     }
 }
 
