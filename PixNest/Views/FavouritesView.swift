@@ -17,6 +17,7 @@ struct FavouritesView: View {
     @State private var alertsManager = AlertsManager()
     
     @State private var images: [UIImage] = []
+    @State private var gridSize: GridSize = .standard
     
     
     var body: some View {
@@ -32,7 +33,7 @@ struct FavouritesView: View {
                         LoadingView()
                         Spacer()
                     } else {
-                        ImagesGrid(searchViewModel: $searchViewModel, images: $images, screen: proxy.size, isShowingFavs: true) { _ in
+                        ImagesGrid(searchViewModel: $searchViewModel, images: $images, gridSize: $gridSize, screen: proxy.size, isShowingFavs: true) { _ in
                             return
                         } deleteAction: { int in
                             coreDataManager.deleteData(index: int)

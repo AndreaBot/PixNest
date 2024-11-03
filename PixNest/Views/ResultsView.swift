@@ -12,6 +12,7 @@ struct ResultsView: View {
     @Binding var searchViewModel: SearchViewModel
     @Binding var path: [NavigationScreens]
     @State private var images = [UIImage]()
+    @State private var gridSize: GridSize = .standard
     
     var body: some View {
         VStack {
@@ -25,7 +26,7 @@ struct ResultsView: View {
                             ContentUnavailableView.search
                             
                         } else {
-                            ImagesGrid(searchViewModel: $searchViewModel, images: $images, screen: proxy.size, isShowingFavs: false) { int in
+                            ImagesGrid(searchViewModel: $searchViewModel, images: $images, gridSize: $gridSize, screen: proxy.size, isShowingFavs: false) { int in
                                 searchViewModel.selectedImage = searchViewModel.searchResults.results[int]
                                 path.append(.fullscreen)
                             } deleteAction: { _ in
@@ -63,16 +64,25 @@ struct ResultsView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    VStack {
-                        Picker("sort by", selection: $searchViewModel.sortType) {
-                            ForEach(SortType.allCases, id:\.self) {
-                                Text("\($0.rawValue) first")
+                HStack {
+                    Menu {
+                        Picker("", selection: $gridSize.animation()) {
+                            ForEach(GridSize.allCases, id: \.self) {
+                                Text("\($0.rawValue.capitalized) grid")
                             }
                         }
+                    } label: {
+                        Image(systemName: "square.grid.3x3")
                     }
-                }  label: {
-                    Image(systemName: K.Icons.sort)
+                    Menu {
+                            Picker("sort by", selection: $searchViewModel.sortType) {
+                                ForEach(SortType.allCases, id:\.self) {
+                                    Text("\($0.rawValue) first")
+                                }
+                            }
+                    }  label: {
+                        Image(systemName: K.Icons.sort)
+                    }
                 }
             }
         }
@@ -86,7 +96,6 @@ struct ResultsView: View {
             if let imageData =  await searchViewModel.loadImage(urlString: result.urls.small) {
                 let UIImage = UIImage(data: imageData)
                 images.append(UIImage!)
-                //                images.append(Image(uiImage: UIImage!))
             }
         }
         searchViewModel.hasLoadedImages = true

@@ -27,7 +27,7 @@ final class SearchViewModel {
             fatalError("The search keywords could not be encoded")
         }
         
-        guard let searchUrl = URL(string: "\(baseUrl)&query=\(encodedText)&page=\(pageNumber)&per_page=20&order_by=\(sortType.rawValue)&client_id=\(K.ImageSearch.apiKey)") else {
+        guard let searchUrl = URL(string: "\(baseUrl)&query=\(encodedText)&page=\(pageNumber)&per_page=24&order_by=\(sortType.rawValue)&client_id=\(K.ImageSearch.apiKey)") else {
             fatalError("Invalid URL")
         }
         

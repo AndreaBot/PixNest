@@ -11,6 +11,7 @@ struct ImagesGrid: View {
     
     @Binding var searchViewModel: SearchViewModel
     @Binding var images: [UIImage]
+    @Binding var gridSize: GridSize
     
     let screen: CGSize
     let isShowingFavs: Bool
@@ -22,10 +23,21 @@ struct ImagesGrid: View {
     @State private var showingOverlay = false
     @State private var selectedIndex: Int?
     
+    var chosenGrid: [GridItem] {
+        switch gridSize {
+        case .standard:
+            [GridItem(.adaptive(minimum: screen.width/3))]
+        case .compact:
+            [GridItem(.adaptive(minimum: screen.width/4))]
+        case .dense:
+            [GridItem(.adaptive(minimum: screen.width/5))]
+        }
+    }
+    
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: screen.width/3))]) {
+            LazyVGrid(columns: chosenGrid) {
                 ForEach(images.indices, id: \.self) { index in
                     Button {
                         if isShowingFavs {
@@ -64,7 +76,7 @@ struct ImagesGrid: View {
 
 
 #Preview {
-    ImagesGrid(searchViewModel: .constant(SearchViewModel()), images: .constant([UIImage]()), screen: CGSize(width: 600, height: 300), isShowingFavs: false, tapAction:  {_ in
+    ImagesGrid(searchViewModel: .constant(SearchViewModel()), images: .constant([UIImage]()), gridSize: .constant(.standard), screen: CGSize(width: 600, height: 300), isShowingFavs: false, tapAction:  {_ in
         print("navigate to fullscreen")
     }, deleteAction: {_ in }, downloadAction: {_ in })
 }
