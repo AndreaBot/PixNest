@@ -15,6 +15,11 @@ struct FullscreenView: View {
     @Binding var searchViewModel: SearchViewModel
     
     let imageResult: Result
+    var imageAlreadyInFavourites: Bool {
+        return coreDataManager.savedPhotos.contains(where: { savedPhoto in
+            savedPhoto.highResUrl == imageResult.urls.full
+        })
+    }
     
     @State private var imageDownloader = ImageDownloader()
     @State private var photo = UIImage()
@@ -53,15 +58,14 @@ struct FullscreenView: View {
             if searchViewModel.hasLoadedImages {
                 ToolbarItem(placement: .primaryAction) {
                     HStack {
-                        Button("Add to my favourites") {
-                            coreDataManager.createNewEntity(lowResLink: imageResult.urls.small, highResLink: imageResult.urls.full)
-                        }
-                        .disabled(coreDataManager.savedPhotos.contains(where: { savedPhoto in
-                            savedPhoto.highResUrl == imageResult.urls.full
-                        }))
                         Button("Download") {
                             imageDownloader.download(image: photo)
                         }
+                        Button(imageAlreadyInFavourites ? "Saved" : "Add to my favourites") {
+                            coreDataManager.createNewEntity(lowResLink: imageResult.urls.small, highResLink: imageResult.urls.full)
+                        }
+                        .disabled(imageAlreadyInFavourites)
+                       
                     }
                 }
             }
@@ -75,7 +79,9 @@ struct FullscreenView: View {
         .alert(alertsManager.alertTitle, isPresented: $alertsManager.isShowingAlert) {
             Button("OK") {
                 if alertsManager.triggerType == .coreDataManager {
-                    coreDataManager.loadData()
+                    withAnimation {
+                        coreDataManager.loadData()
+                    }
                 }
             }
         } message: {

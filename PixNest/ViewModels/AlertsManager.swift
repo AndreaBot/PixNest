@@ -35,7 +35,3 @@ final class AlertsManager {
         isShowingAlert = true
     }
 }
-
-enum AlertTriggerType {
-    case imageDownloader, coreDataManager
-}

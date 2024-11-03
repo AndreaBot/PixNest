@@ -16,6 +16,7 @@ struct SearchBar: View {
         HStack {
             TextField("Search", text: $searchKeyword, prompt: Text("What are you looking for?"))
             Button {
+                guard !searchKeyword.isEmpty else { return }
                 searchAction()
             } label: {
                 Image(systemName: K.Icons.search)
