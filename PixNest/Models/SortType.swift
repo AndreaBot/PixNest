@@ -9,5 +9,5 @@ import Foundation
 
 enum SortType: String, CaseIterable {
     case relevant = "Most relevant"
-    case latest = "Latest"
+    case latest = "Newest"
 }

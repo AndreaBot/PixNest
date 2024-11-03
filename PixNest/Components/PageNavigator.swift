@@ -14,8 +14,6 @@ struct PageNavigator: View {
     
     var body: some View {
         HStack {
-            Spacer()
-            
             Button {
                 currentPage -= 1
             } label: {
@@ -25,8 +23,8 @@ struct PageNavigator: View {
             
             Spacer()
             
-            Text("\(currentPage) / \(totalPages)")
-                .font(.title2)
+            Text("Page \(currentPage) / \(totalPages)")
+                .font(.title3)
             
             Spacer()
             
@@ -36,8 +34,6 @@ struct PageNavigator: View {
                 Image(systemName: K.Icons.nextPage)
             }
             .disabled(currentPage == totalPages)
-            
-            Spacer()
         }
         .font(.title)
     }

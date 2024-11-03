@@ -40,7 +40,7 @@ struct ResultsView: View {
             Spacer()
             
             PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.total_pages)
-                .padding(.vertical)
+                .padding()
         }
         .navigationTitle(searchViewModel.searchKeyword.capitalized)
         .navigationBarTitleDisplayMode(.inline)
