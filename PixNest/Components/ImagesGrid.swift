@@ -13,16 +13,6 @@ struct ImagesGrid: View {
     @Binding var images: [UIImage]
     @Binding var gridSize: GridSize
     
-    let screen: CGSize
-    let isShowingFavs: Bool
-    
-    let tapAction: (Int) -> Void
-    let deleteAction: (Int) -> Void
-    let downloadAction: (Int) async -> Void
-    
-    @State private var showingOverlay = false
-    @State private var selectedIndex: Int?
-    
     var chosenGrid: [GridItem] {
         switch gridSize {
         case .standard:
@@ -33,6 +23,27 @@ struct ImagesGrid: View {
             [GridItem(.adaptive(minimum: screen.width/5))]
         }
     }
+    
+    var radBasedOnGridType: CGFloat {
+        switch gridSize {
+        case .standard:
+            10
+        case .compact:
+            6
+        case .dense:
+            3
+        }
+    }
+    
+    let screen: CGSize
+    let isShowingFavs: Bool
+    
+    let tapAction: (Int) -> Void
+    let deleteAction: (Int) -> Void
+    let downloadAction: (Int) async -> Void
+    
+    @State private var showingOverlay = false
+    @State private var selectedIndex: Int?
     
     
     var body: some View {
@@ -50,7 +61,7 @@ struct ImagesGrid: View {
                         Image(uiImage:images[index])
                             .resizable()
                             .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .clipShape(RoundedRectangle(cornerRadius: radBasedOnGridType))
                             .overlay {
                                 if showingOverlay {
                                     if let selectedIndex = selectedIndex {
