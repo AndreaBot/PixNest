@@ -50,34 +50,36 @@ struct ImagesGrid: View {
         ScrollView {
             LazyVGrid(columns: chosenGrid) {
                 ForEach(images.indices, id: \.self) { index in
-                    Button {
-                        if isShowingFavs {
-                            selectedIndex = index
-                            showingOverlay = true
-                        } else {
-                            tapAction(index)
-                        }
-                    } label: {
-                        Image(uiImage:images[index])
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: radBasedOnGridType))
-                            .overlay {
-                                if showingOverlay {
-                                    if let selectedIndex = selectedIndex {
-                                        if selectedIndex == index {
-                                            FavouritePhotoOverlay(deleteAction: {
-                                                deleteAction(selectedIndex)
-                                                self.selectedIndex = nil
-                                            }, downloadAction: {
-                                                await downloadAction(selectedIndex)
-                                            })
-                                            .padding()
-                                        }
+                    Image(uiImage:images[index])
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: radBasedOnGridType))
+                        .overlay {
+                            if showingOverlay {
+                                if let selectedIndex = selectedIndex {
+                                    if selectedIndex == index {
+                                        FavouritePhotoOverlay(deleteAction: {
+                                            deleteAction(selectedIndex)
+                                            self.selectedIndex = nil
+                                        }, downloadAction: {
+                                            await downloadAction(selectedIndex)
+                                        })
+                                        .padding()
+                                        .transition(.scale.combined(with: .opacity))
                                     }
                                 }
                             }
-                    }
+                        }
+                        .onTapGesture {
+                            if isShowingFavs {
+                                withAnimation(.smooth) {
+                                    selectedIndex = index
+                                    showingOverlay = true
+                                }
+                            } else {
+                                tapAction(index)
+                            }
+                        }
                 }
             }
             .padding(.horizontal)

@@ -19,6 +19,9 @@ struct FavouritePhotoOverlay: View {
             } label: {
                 Image(systemName: K.Icons.noFavourites)
             }
+            .padding()
+            .background(.background.opacity(0.7))
+            .clipShape(Circle())
             
             Spacer()
             
@@ -29,13 +32,14 @@ struct FavouritePhotoOverlay: View {
             } label: {
                 Image(systemName: K.Icons.download)
             }
+            .padding()
+            .background(.background.opacity(0.7))
+            .clipShape(Circle())
         }
+        .foregroundStyle(.accent)
         .buttonStyle(.plain)
         .font(.largeTitle)
         .padding()
-        .background(.background.opacity(0.7))
-        .clipShape(Capsule())
-        
     }
 }
 
