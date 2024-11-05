@@ -12,7 +12,7 @@ struct ResultsView: View {
     @Binding var searchViewModel: SearchViewModel
     @Binding var path: [NavigationScreens]
     @State private var images = [UIImage]()
-    @State private var gridSize: GridSize = .standard
+    @AppStorage("gridSize") var gridSize: GridSize = .standard
     
     var body: some View {
         VStack {
