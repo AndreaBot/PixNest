@@ -10,7 +10,7 @@ import Foundation
 struct SearchResult: Codable {
     
     let total: Int
-    var total_pages: Int
+    var totalPages: Int
     var results: [Result]
 }
 
@@ -22,11 +22,11 @@ struct Result: Codable {
 
 struct User: Codable {
     let name : String
-    let profile_image: Profile_Image
+    let profileImage: ProfileImage
     let links: Links
 }
 
-struct Profile_Image: Codable {
+struct ProfileImage: Codable {
     let medium: String
 }
 
@@ -40,5 +40,5 @@ struct URLS : Codable {
 }
 
 struct Link: Codable {
-    let download_location: String
+    let downloadLocation: String
 }

@@ -73,7 +73,7 @@ struct FullscreenView: View {
         }
         .onChange(of: imageDownloader.downloadIsSuccessful) { oldValue, newValue in
             if newValue == true {
-                imageDownloader.triggerDownloadCount(imageResult.links.download_location)
+                imageDownloader.triggerDownloadCount(imageResult.links.downloadLocation)
                 imageDownloader.downloadIsSuccessful = false
             }
         }
@@ -92,7 +92,7 @@ struct FullscreenView: View {
     
     func loadImages() async {
         searchViewModel.hasLoadedImages = false
-        async let profileImageData = searchViewModel.loadImage(urlString: imageResult.user.profile_image.medium)
+        async let profileImageData = searchViewModel.loadImage(urlString: imageResult.user.profileImage.medium)
         async let mainImageData = searchViewModel.loadImage(urlString: imageResult.urls.full)
         
         if let profileData = await profileImageData, let profileImage = UIImage(data: profileData) {
