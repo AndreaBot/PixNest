@@ -5,12 +5,14 @@
 //  Created by Andrea Bottino on 26/10/2024.
 //
 
+
+
 import SwiftUI
 
-struct ImagesGrid: View {
+struct ImagesGrid<Items: ImageURLsProvider>: View {
     
     @Binding var searchViewModel: SearchViewModel
-    @Binding var images: [UIImage]
+    @Binding var results: [Items]
     @Binding var gridSize: GridSize
     
     var chosenGrid: [GridItem] {
@@ -49,37 +51,41 @@ struct ImagesGrid: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: chosenGrid) {
-                ForEach(images.indices, id: \.self) { index in
-                    Image(uiImage:images[index])
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: radBasedOnGridType))
-                        .overlay {
-                            if showingOverlay {
-                                if let selectedIndex = selectedIndex {
-                                    if selectedIndex == index {
-                                        FavouritePhotoOverlay(deleteAction: {
-                                            deleteAction(selectedIndex)
-                                            self.selectedIndex = nil
-                                        }, downloadAction: {
-                                            await downloadAction(selectedIndex)
-                                        })
-                                        .padding()
-                                        .transition(.scale.combined(with: .opacity))
+                ForEach(results.indices, id: \.self) { index in
+                    AsyncImage(url: URL(string: results[index].urls.small)) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: radBasedOnGridType))
+                            .overlay {
+                                if showingOverlay {
+                                    if let selectedIndex = selectedIndex {
+                                        if selectedIndex == index {
+                                            FavouritePhotoOverlay(deleteAction: {
+                                                deleteAction(selectedIndex)
+                                                self.selectedIndex = nil
+                                            }, downloadAction: {
+                                                await downloadAction(selectedIndex)
+                                            })
+                                            .padding()
+                                            .transition(.scale.combined(with: .opacity))
+                                        }
                                     }
                                 }
                             }
-                        }
-                        .onTapGesture {
-                            if isShowingFavs {
-                                withAnimation(.smooth) {
-                                    selectedIndex = index
-                                    showingOverlay = true
+                            .onTapGesture {
+                                if isShowingFavs {
+                                    withAnimation(.smooth) {
+                                        selectedIndex = index
+                                        showingOverlay = true
+                                    }
+                                } else {
+                                    tapAction(index)
                                 }
-                            } else {
-                                tapAction(index)
                             }
-                        }
+                    } placeholder: {
+                        LoadingView()
+                    }
                 }
             }
             .padding(.horizontal)
@@ -88,8 +94,8 @@ struct ImagesGrid: View {
 }
 
 
-#Preview {
-    ImagesGrid(searchViewModel: .constant(SearchViewModel()), images: .constant([UIImage]()), gridSize: .constant(.standard), screen: CGSize(width: 600, height: 300), isShowingFavs: false, tapAction:  {_ in
-        print("navigate to fullscreen")
-    }, deleteAction: {_ in }, downloadAction: {_ in })
-}
+//#Preview {
+//    ImagesGrid(searchViewModel: .constant(SearchViewModel()), images: .constant([UIImage]()), gridSize: .constant(.standard), screen: CGSize(width: 600, height: 300), isShowingFavs: false, tapAction:  {_ in
+//        print("navigate to fullscreen")
+//    }, deleteAction: {_ in }, downloadAction: {_ in })
+//}

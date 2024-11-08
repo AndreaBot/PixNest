@@ -9,8 +9,9 @@ import SwiftUI
 
 struct PhotoCreditsBar: View {
     
-    let photographerProfilePicture: UIImage
-    let photographernName: String
+    @Binding var loadingBool: Bool
+    let photographerPhotoLink: String
+    let photographerName: String
     let photographerPageURL: String
     let openURLAction: OpenURLAction
     
@@ -24,12 +25,9 @@ struct PhotoCreditsBar: View {
             } label: {
                 HStack {
                     HStack {
-                        Image(uiImage: photographerProfilePicture)
-                            .font(.title)
-                            .clipShape(Circle())
-                        
+                        CustomAsyncImage(loadingBool: $loadingBool, urlString: photographerPhotoLink, shape: AnyShape(Circle()), scaleFactor: 0.15)
                         VStack(alignment: .leading) {
-                            Text(photographernName)
+                            Text(photographerName)
                                 .underline()
                                 .font(.title3)
                             

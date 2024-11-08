@@ -15,42 +15,33 @@ struct ResultsView: View {
     @AppStorage("gridSize") var gridSize: GridSize = .standard
     
     var body: some View {
-        VStack {
-            Spacer()
-            if !searchViewModel.hasLoadedImages {
-                LoadingView()
+        GeometryReader { proxy in
+            if searchViewModel.searchResults.results.isEmpty {
+                ContentUnavailableView.search
+                
             } else {
-                GeometryReader { proxy in
-                    VStack {
-                        if searchViewModel.searchResults.results.isEmpty {
-                            ContentUnavailableView.search
-                            
-                        } else {
-                            ImagesGrid(searchViewModel: $searchViewModel, images: $images, gridSize: $gridSize, screen: proxy.size, isShowingFavs: false) { int in
-                                searchViewModel.selectedImage = searchViewModel.searchResults.results[int]
-                                path.append(.fullscreen)
-                            } deleteAction: { _ in
-                                return
-                            } downloadAction: { _ in
-                                return
-                            }
-                        }
+                VStack {
+                    ImagesGrid(searchViewModel: $searchViewModel, results: $searchViewModel.searchResults.results, gridSize: $gridSize, screen: proxy.size, isShowingFavs: false) { int in
+                        searchViewModel.selectedImage = searchViewModel.searchResults.results[int]
+                        path.append(.fullscreen)
+                    } deleteAction: { _ in
+                        return
+                    } downloadAction: { _ in
+                        return
                     }
+                    PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.totalPages)
+                        .padding()
                 }
             }
-            Spacer()
-            
-            PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.totalPages)
-                .padding()
         }
         .navigationTitle(searchViewModel.searchKeyword.capitalized)
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await loadImages()
+            searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
         }
         .onChange(of: searchViewModel.pageNumber) { oldValue, newValue in
             Task {
-                await loadImages()
+                searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
             }
         }
         .onChange(of: searchViewModel.sortType) { oldValue, newValue in
@@ -58,7 +49,7 @@ struct ResultsView: View {
                 searchViewModel.pageNumber = 1
             } else {
                 Task {
-                    await loadImages()
+                    searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
                 }
             }
         }
@@ -75,11 +66,11 @@ struct ResultsView: View {
                         Image(systemName: "square.grid.3x3")
                     }
                     Menu {
-                            Picker("sort by", selection: $searchViewModel.sortType) {
-                                ForEach(SortType.allCases, id:\.self) {
-                                    Text("\($0.rawValue) first")
-                                }
+                        Picker("sort by", selection: $searchViewModel.sortType) {
+                            ForEach(SortType.allCases, id:\.self) {
+                                Text("\($0.rawValue) first")
                             }
+                        }
                     }  label: {
                         Image(systemName: K.Icons.sort)
                     }
@@ -87,20 +78,8 @@ struct ResultsView: View {
             }
         }
     }
-    
-    func loadImages() async {
-        searchViewModel.hasLoadedImages = false
-        images = []
-        searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
-        for result in searchViewModel.searchResults.results {
-            if let imageData =  await searchViewModel.loadImage(urlString: result.urls.small) {
-                let UIImage = UIImage(data: imageData)
-                images.append(UIImage!)
-            }
-        }
-        searchViewModel.hasLoadedImages = true
-    }
 }
+
 
 #Preview {
     ResultsView(searchViewModel: .constant(SearchViewModel()), path: .constant([NavigationScreens]()))

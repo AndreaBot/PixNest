@@ -14,8 +14,8 @@ struct SearchResult: Codable {
     var results: [Result]
 }
 
-struct Result: Codable {
-    let urls: URLS
+struct Result: Codable, ImageURLsProvider {
+    var urls: URLS
     let user: User
     let links: Link
 }
@@ -34,7 +34,7 @@ struct Links: Codable {
     let html: String
 }
 
-struct URLS : Codable {
+struct URLS: Codable {
     let small : String
     let full : String
 }
@@ -42,3 +42,6 @@ struct URLS : Codable {
 struct Link: Codable {
     let downloadLocation: String
 }
+
+
+
