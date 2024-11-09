@@ -33,12 +33,13 @@ final class CoreDataManager: ObservableObject {
             print(error.localizedDescription)
         }
     }
+    
     func createNewEntity(id: UUID = UUID(), date: Date = Date.now, lowResLink: String, highResLink: String) {
         let newEntity = SavedPhoto(context: container.viewContext)
-        newEntity.id = date
-        newEntity.lowResLink = lowResLink
-        newEntity.highResLink = highResLink
-        
+        newEntity.id = id
+        newEntity.date = date
+        newEntity.lowResUrl = lowResLink
+        newEntity.highResUrl = highResLink
         saveData()
         alertsManager?.showAddingToFavouritesConfirmation()
     }

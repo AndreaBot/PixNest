@@ -17,54 +17,52 @@ struct FullscreenView: View {
     let imageResult: Result
     var imageAlreadyInFavourites: Bool {
         return coreDataManager.savedPhotos.contains(where: { savedPhoto in
-            savedPhoto.highResLink == imageResult.urls.full
+            savedPhoto.highResUrl == imageResult.urls.full
         })
     }
     
     @State private var imageDownloader = ImageDownloader()
+    @State private var photo = UIImage()
+    @State private var photographerProfilePicture = UIImage()
+    
     @State private var alertsManager = AlertsManager()
     
     
     var body: some View {
-        VStack {
-            Spacer()
-            
-            CustomAsyncImage(loadingBool: $searchViewModel.hasLoadedFullImage,
-                             urlString: imageResult.urls.full,
-                             shape: AnyShape(RoundedRectangle(cornerRadius: 20)),
-                             scaleFactor: 0.9)
-            
-            Spacer()
-            
-            PhotoCreditsBar(loadingBool: $searchViewModel.hasLoadedPhotographerImage,
-                            photographerPhotoLink: imageResult.user.profileImage.medium,
-                            photographerName: imageResult.user.name,
-                            photographerPageURL: imageResult.user.links.html,
-                            openURLAction: openURL)
-            .padding()
+        Group {
+            if !searchViewModel.hasLoadedImages {
+                LoadingView()
+            } else {
+                VStack {
+                    Spacer()
+                    
+                    Image(uiImage: photo)
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    
+                    Spacer()
+                    
+                    PhotoCreditsBar(photographerProfilePicture: photographerProfilePicture, photographernName: imageResult.user.name, photographerPageURL: imageResult.user.links.html, openURLAction: openURL)
+                }
+                .padding()
+            }
         }
         .onAppear {
-            searchViewModel.hasLoadedFullImage = false
             imageDownloader.alertsManager = alertsManager
-            coreDataManager.alertsManager = alertsManager
+            coreDataManager.alertsManager = self.alertsManager
+        }
+        .task {
+            await loadImages()
         }
         .toolbar {
-            if searchViewModel.hasLoadedFullImage {
+            if searchViewModel.hasLoadedImages {
                 ToolbarItem(placement: .primaryAction) {
                     HStack {
                         Button("Download") {
-                            Task {
-                                guard let photoData = await searchViewModel.loadImage(urlString: imageResult.urls.full) else {
-                                    return
-                                }
-                                guard let photoToDownload = UIImage(data: photoData) else {
-                                    return
-                                }
-                                imageDownloader.download(image: photoToDownload)
-                            }
+                            imageDownloader.download(image: photo)
                         }
                         Button(imageAlreadyInFavourites ? "Saved" : "Add to my favourites") {
-                            
                             coreDataManager.createNewEntity(lowResLink: imageResult.urls.small, highResLink: imageResult.urls.full)
                         }
                         .disabled(imageAlreadyInFavourites)
@@ -91,7 +89,23 @@ struct FullscreenView: View {
             Text(alertsManager.alertMessage)
         }
     }
+    
+    func loadImages() async {
+        searchViewModel.hasLoadedImages = false
+        async let profileImageData = searchViewModel.loadImage(urlString: imageResult.user.profileImage.medium)
+        async let mainImageData = searchViewModel.loadImage(urlString: imageResult.urls.full)
+        
+        if let profileData = await profileImageData, let profileImage = UIImage(data: profileData) {
+            photographerProfilePicture = profileImage
+        }
+        
+        if let mainData = await mainImageData, let mainImage = UIImage(data: mainData) {
+            photo = mainImage
+        }
+        searchViewModel.hasLoadedImages = true
+    }
 }
+
 
 //#Preview {
 //    FullscreenView()

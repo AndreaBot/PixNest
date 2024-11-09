@@ -15,9 +15,8 @@ struct FavouritesView: View {
     
     @State private var imageDownloader = ImageDownloader()
     @State private var alertsManager = AlertsManager()
-    @State private var coreDataAdapter = CoreDataAdapter()
     
-    @State private var images: [URLS] = []
+    @State private var images: [UIImage] = []
     @State private var gridSize: GridSize = .standard
     
     
@@ -29,22 +28,22 @@ struct FavouritesView: View {
                                            systemImage: K.Icons.noFavourites,
                                            description: Text("Get busy exploring our app!"))
                 } else {
-                    ImagesGrid(searchViewModel: $searchViewModel,
-                               results: $coreDataAdapter.convertedData,
-                               gridSize: $gridSize,
-                               screen: proxy.size,
-                               isShowingFavs: true) { _ in
-                        return
-                    } deleteAction: { int in
-                        coreDataManager.deleteData(index: int)
-                        coreDataAdapter.convertedData.remove(at: int)
-                        
-                    } downloadAction: { int in
-                        guard let highResLink = coreDataManager.savedPhotos[int].highResLink else {
+                    if !searchViewModel.hasLoadedImages {
+                        Spacer()
+                        LoadingView()
+                        Spacer()
+                    } else {
+                        ImagesGrid(searchViewModel: $searchViewModel, images: $images, gridSize: $gridSize, screen: proxy.size, isShowingFavs: true) { _ in
                             return
-                        }
-                        if let imageData = await searchViewModel.loadImage(urlString: highResLink ) {
-                            imageDownloader.download(image: UIImage(data: imageData)!)
+                        } deleteAction: { int in
+                            coreDataManager.deleteData(index: int)
+                        } downloadAction: { int in
+                            guard let highResLink = coreDataManager.savedPhotos[int].highResUrl else {
+                                return
+                            }
+                            if let imageData = await searchViewModel.loadImage(urlString: highResLink ) {
+                                imageDownloader.download(image: UIImage(data: imageData)!)
+                            }
                         }
                     }
                 }
@@ -52,8 +51,15 @@ struct FavouritesView: View {
             .navigationTitle("My favourites")
         }
         .onAppear {
-            coreDataAdapter.convertData(from: coreDataManager.savedPhotos)
             imageDownloader.alertsManager = alertsManager
+        }
+        .task {
+            await loadImages()
+        }
+        .onChange(of: coreDataManager.savedPhotos) { _, _ in
+            Task {
+                await loadImages()
+            }
         }
         .alert(alertsManager.alertTitle, isPresented: $alertsManager.isShowingAlert) {
             Button("OK") {}
@@ -61,12 +67,23 @@ struct FavouritesView: View {
             Text(alertsManager.alertMessage)
         }
     }
+    
+    func loadImages() async {
+        searchViewModel.hasLoadedImages = false
+        images = []
+        for photo in coreDataManager.savedPhotos {
+            guard let photoUrl = photo.lowResUrl else {
+                return
+            }
+            if let imageData = await searchViewModel.loadImage(urlString: photoUrl) {
+                let UIImage = UIImage(data: imageData)
+                images.append(UIImage!)
+            }
+        }
+        searchViewModel.hasLoadedImages = true
+    }
 }
 
 #Preview {
     FavouritesView(searchViewModel: .constant(SearchViewModel()))
 }
-
-
-
-

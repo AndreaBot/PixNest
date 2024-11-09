@@ -15,8 +15,7 @@ final class SearchViewModel {
     var sortType: SortType = .relevant
     var searchResults = SearchResult(total: 0, totalPages: 0, results: [])
     
-    var hasLoadedFullImage = false
-    var hasLoadedPhotographerImage = false
+    var hasLoadedImages = false
     
     var selectedImage: Result?
     
