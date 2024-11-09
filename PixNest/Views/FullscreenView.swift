@@ -12,7 +12,9 @@ struct FullscreenView: View {
     @Environment(\.openURL) var openURL
     @EnvironmentObject var coreDataManager: CoreDataManager
     
-    @Binding var searchViewModel: SearchViewModel
+    @State private var imageDownloader = ImageDownloader()
+    @State private var imagesLoader = ImagesLoader()
+    @State private var alertsManager = AlertsManager()
     
     let imageResult: Result
     var imageAlreadyInFavourites: Bool {
@@ -21,23 +23,19 @@ struct FullscreenView: View {
         })
     }
     
-    @State private var imageDownloader = ImageDownloader()
-    @State private var imagesLoader = ImagesLoader()
-    @State private var alertsManager = AlertsManager()
-    
     
     var body: some View {
         VStack {
             Spacer()
             
-            CustomAsyncImage(loadingBool: $searchViewModel.hasLoadedFullImage,
+            CustomAsyncImage(loadingBool: $imagesLoader.loadingIsComplete,
                              urlString: imageResult.urls.full,
                              shape: AnyShape(RoundedRectangle(cornerRadius: 20)),
                              scaleFactor: 0.9)
             
             Spacer()
             
-            PhotoCreditsBar(loadingBool: $searchViewModel.hasLoadedPhotographerImage,
+            PhotoCreditsBar(loadingBool: $imagesLoader.photographerImageIsLoaded,
                             photographerPhotoLink: imageResult.user.profileImage.medium,
                             photographerName: imageResult.user.name,
                             photographerPageURL: imageResult.user.links.html,
@@ -47,11 +45,9 @@ struct FullscreenView: View {
         .onAppear {
             imageDownloader.alertsManager = alertsManager
             coreDataManager.alertsManager = alertsManager
-            searchViewModel.hasLoadedFullImage = false
-            searchViewModel.hasLoadedPhotographerImage = false
         }
         .toolbar {
-            if searchViewModel.hasLoadedFullImage {
+            if imagesLoader.loadingIsComplete {
                 ToolbarItem(placement: .primaryAction) {
                     HStack {
                         Button("Download") {
@@ -65,11 +61,11 @@ struct FullscreenView: View {
                                 imageDownloader.download(image: photoToDownload)
                             }
                         }
+                        
                         Button(imageAlreadyInFavourites ? "Saved" : "Add to my favourites") {
                             coreDataManager.createNewEntity(lowResLink: imageResult.urls.small, highResLink: imageResult.urls.full)
                         }
                         .disabled(imageAlreadyInFavourites)
-                        
                     }
                 }
             }

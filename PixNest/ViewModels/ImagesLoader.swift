@@ -11,6 +11,7 @@ import UIKit
 final class ImagesLoader {
     
     var loadingIsComplete = false
+    var photographerImageIsLoaded = false
     
     func loadImage(urlString: String) async -> Data? {
         guard let url = URL(string: urlString) else {

@@ -41,7 +41,7 @@ struct SearchView: View {
                         ResultsView(searchViewModel: $searchViewModel, path: $path)
                     case .fullscreen:
                         if let selectedImage = searchViewModel.selectedImage {
-                            FullscreenView(searchViewModel: $searchViewModel, imageResult: selectedImage)
+                            FullscreenView(imageResult: selectedImage)
                         }
                         
                     }
