@@ -16,6 +16,8 @@ final class SearchViewModel {
     var searchResults = SearchResult(total: 0, totalPages: 0, results: [])
     
     var hasLoadedImages = false
+    var hasLoadedFullImage = false
+    var hasLoadedPhotographerImage = false
     
     var selectedImage: Result?
     

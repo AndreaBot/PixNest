@@ -22,45 +22,47 @@ struct FullscreenView: View {
     }
     
     @State private var imageDownloader = ImageDownloader()
-    @State private var photo = UIImage()
-    @State private var photographerProfilePicture = UIImage()
-    
     @State private var alertsManager = AlertsManager()
     
     
     var body: some View {
-        Group {
-            if !searchViewModel.hasLoadedImages {
-                LoadingView()
-            } else {
-                VStack {
-                    Spacer()
-                    
-                    Image(uiImage: photo)
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                    
-                    Spacer()
-                    
-                    PhotoCreditsBar(photographerProfilePicture: photographerProfilePicture, photographernName: imageResult.user.name, photographerPageURL: imageResult.user.links.html, openURLAction: openURL)
-                }
-                .padding()
-            }
+        VStack {
+            Spacer()
+            
+            CustomAsyncImage(loadingBool: $searchViewModel.hasLoadedFullImage,
+                             urlString: imageResult.urls.full,
+                             shape: AnyShape(RoundedRectangle(cornerRadius: 20)),
+                             scaleFactor: 0.9)
+            
+            Spacer()
+            
+            PhotoCreditsBar(loadingBool: $searchViewModel.hasLoadedPhotographerImage,
+                            photographerPhotoLink: imageResult.user.profileImage.medium,
+                            photographerName: imageResult.user.name,
+                            photographerPageURL: imageResult.user.links.html,
+                            openURLAction: openURL)
+            .padding()
         }
         .onAppear {
             imageDownloader.alertsManager = alertsManager
-            coreDataManager.alertsManager = self.alertsManager
-        }
-        .task {
-            await loadImages()
+            coreDataManager.alertsManager = alertsManager
+            searchViewModel.hasLoadedFullImage = false
+            searchViewModel.hasLoadedPhotographerImage = false
         }
         .toolbar {
-            if searchViewModel.hasLoadedImages {
+            if searchViewModel.hasLoadedFullImage {
                 ToolbarItem(placement: .primaryAction) {
                     HStack {
                         Button("Download") {
-                            imageDownloader.download(image: photo)
+                            Task {
+                                guard let photoData = await searchViewModel.loadImage(urlString: imageResult.urls.full) else {
+                                    return
+                                }
+                                guard let photoToDownload = UIImage(data: photoData) else {
+                                    return
+                                }
+                                imageDownloader.download(image: photoToDownload)
+                            }
                         }
                         Button(imageAlreadyInFavourites ? "Saved" : "Add to my favourites") {
                             coreDataManager.createNewEntity(lowResLink: imageResult.urls.small, highResLink: imageResult.urls.full)
@@ -88,21 +90,6 @@ struct FullscreenView: View {
         } message: {
             Text(alertsManager.alertMessage)
         }
-    }
-    
-    func loadImages() async {
-        searchViewModel.hasLoadedImages = false
-        async let profileImageData = searchViewModel.loadImage(urlString: imageResult.user.profileImage.medium)
-        async let mainImageData = searchViewModel.loadImage(urlString: imageResult.urls.full)
-        
-        if let profileData = await profileImageData, let profileImage = UIImage(data: profileData) {
-            photographerProfilePicture = profileImage
-        }
-        
-        if let mainData = await mainImageData, let mainImage = UIImage(data: mainData) {
-            photo = mainImage
-        }
-        searchViewModel.hasLoadedImages = true
     }
 }
 

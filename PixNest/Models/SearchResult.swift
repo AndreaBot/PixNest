@@ -34,9 +34,9 @@ struct Links: Codable {
     let html: String
 }
 
-struct URLS : Codable {
-    let small : String
-    let full : String
+struct URLS: Codable {
+    let small: String
+    let full: String
 }
 
 struct Link: Codable {
