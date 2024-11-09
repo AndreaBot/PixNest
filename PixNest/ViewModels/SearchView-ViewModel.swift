@@ -45,18 +45,4 @@ final class SearchViewModel {
         
         return results
     }
-    
-    func loadImage(urlString: String) async -> Data? {
-        guard let url = URL(string: urlString) else {
-            return nil
-        }
-        
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            return data
-        } catch {
-            print(error.localizedDescription)
-        }
-        return nil
-    }
 }

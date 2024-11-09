@@ -22,6 +22,7 @@ struct FullscreenView: View {
     }
     
     @State private var imageDownloader = ImageDownloader()
+    @State private var imagesLoader = ImagesLoader()
     @State private var alertsManager = AlertsManager()
     
     
@@ -55,7 +56,7 @@ struct FullscreenView: View {
                     HStack {
                         Button("Download") {
                             Task {
-                                guard let photoData = await searchViewModel.loadImage(urlString: imageResult.urls.full) else {
+                                guard let photoData = await imagesLoader.loadImage(urlString: imageResult.urls.full) else {
                                     return
                                 }
                                 guard let photoToDownload = UIImage(data: photoData) else {
