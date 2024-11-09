@@ -99,7 +99,7 @@ struct ResultsView: View {
                     Menu {
                         Picker("sort by", selection: $searchViewModel.sortType) {
                             ForEach(SortType.allCases, id:\.self) {
-                                Text("\($0.rawValue) first")
+                                Text("\($0.displayName) first")
                             }
                         }
                     }  label: {

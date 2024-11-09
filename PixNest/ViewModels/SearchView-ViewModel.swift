@@ -42,6 +42,7 @@ final class SearchViewModel {
         } catch {
             print(error.localizedDescription)
         }
+        
         return results
     }
     

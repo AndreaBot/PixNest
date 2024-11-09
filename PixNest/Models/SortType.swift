@@ -8,6 +8,15 @@
 import Foundation
 
 enum SortType: String, CaseIterable {
-    case relevant = "Most relevant"
-    case latest = "Newest"
+    case relevant
+    case latest
+
+    var displayName: String {
+        switch self {
+        case .relevant:
+            return "Most relevant"
+        case .latest:
+            return "Newest"
+        }
+    }
 }
