@@ -27,13 +27,13 @@ final class ImagesLoader {
         return nil
     }
     
-    func loadCoreDataImages(from photoArray: [SavedPhoto]) async -> ([UIImage], Bool) {
+    func loadCoreDataImages(from photoArray: [SavedPhoto]) async -> [UIImage] {
         var images: [UIImage] = []
-        var completionTrackerResult = false
+        loadingIsComplete = false
         
         for photo in photoArray {
             guard let photoUrl = photo.lowResUrl else {
-                return (images, completionTrackerResult)
+                return images
             }
             if let imageData = await loadImage(urlString: photoUrl) {
                 if let uiImage = UIImage(data: imageData) {
@@ -42,13 +42,13 @@ final class ImagesLoader {
             }
         }
         
-        completionTrackerResult = true
-        return (images, completionTrackerResult)
+        loadingIsComplete = true
+        return images
     }
     
-    func loadAPIImages(from photoArray: [Result]) async -> ([UIImage], Bool) {
+    func loadAPIImages(from photoArray: [Result]) async -> [UIImage] {
         var images: [UIImage] = []
-        var completionTrackerResult = false
+        loadingIsComplete = false
         
         for photo in photoArray {
             if let imageData = await loadImage(urlString: photo.urls.small) {
@@ -58,7 +58,7 @@ final class ImagesLoader {
             }
         }
         
-        completionTrackerResult = true
-        return (images, completionTrackerResult)
+        loadingIsComplete = true
+        return images
     }
 }

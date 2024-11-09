@@ -49,38 +49,22 @@ struct ResultsView: View {
         .navigationTitle(searchViewModel.searchKeyword.capitalized)
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            imagesLoader.loadingIsComplete = false
-            
             searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
-            let (loadedImages, isComplete) = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
-            
-            images = loadedImages
-            imagesLoader.loadingIsComplete = isComplete
+            images = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
         }
         .onChange(of: searchViewModel.pageNumber) { oldValue, newValue in
             Task {
-                imagesLoader.loadingIsComplete = false
-                
                 searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
-                let (loadedImages, isComplete) = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
-                
-                images = loadedImages
-                imagesLoader.loadingIsComplete = isComplete
+                images = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
             }
         }
         .onChange(of: searchViewModel.sortType) { oldValue, newValue in
-            print("sort: \(newValue)")
             if searchViewModel.pageNumber > 1 {
                 searchViewModel.pageNumber = 1
             } else {
                 Task {
-                    imagesLoader.loadingIsComplete = false
-                    
                     searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
-                    let (loadedImages, isComplete) = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
-                    
-                    images = loadedImages
-                    imagesLoader.loadingIsComplete = isComplete
+                    images = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
                 }
             }
         }
@@ -94,7 +78,7 @@ struct ResultsView: View {
                             }
                         }
                     } label: {
-                        Image(systemName: "square.grid.3x3")
+                        Image(systemName: K.Icons.gridSelection)
                     }
                     Menu {
                         Picker("sort by", selection: $searchViewModel.sortType) {

@@ -56,10 +56,7 @@ struct FavouritesView: View {
             imageDownloader.alertsManager = alertsManager
         }
         .task {
-            imagesLoader.loadingIsComplete = false
-            let (loadedImages, isComplete) = await imagesLoader.loadCoreDataImages(from: coreDataManager.savedPhotos)
-            images = loadedImages
-            imagesLoader.loadingIsComplete = isComplete
+            images = await imagesLoader.loadCoreDataImages(from: coreDataManager.savedPhotos)
         }
         .alert(alertsManager.alertTitle, isPresented: $alertsManager.isShowingAlert) {
             Button("OK") {}

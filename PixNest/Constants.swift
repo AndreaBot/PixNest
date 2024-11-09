@@ -33,6 +33,7 @@ struct K {
         static let noFavourites = "heart.slash.fill"
         static let download = "square.and.arrow.down.fill"
         static let loadingError = "exclamationmark.triangle"
+        static let gridSelection = "square.grid.3x3"
     }
     
     struct ImageSearch {

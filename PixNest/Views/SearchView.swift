@@ -43,7 +43,6 @@ struct SearchView: View {
                         if let selectedImage = searchViewModel.selectedImage {
                             FullscreenView(imageResult: selectedImage)
                         }
-                        
                     }
                 }
             }
