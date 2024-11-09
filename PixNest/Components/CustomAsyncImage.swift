@@ -32,13 +32,17 @@ struct CustomAsyncImage: View {
                         loadingBool = true
                     }
             case .failure(_):
-                Image(systemName: "exclamationmark.icloud")
+                Image(systemName: K.Icons.loadingError)
+                    .font(.largeTitle)
             @unknown default:
-                Image(systemName: "exclamationmark.icloud")
+                Image(systemName: K.Icons.loadingError)
+                    .font(.largeTitle)
             }
         }
     }
 }
+
+
 //#Preview {
 //    CustomAsyncImage()
 //}

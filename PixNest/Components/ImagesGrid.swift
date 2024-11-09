@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ImagesGrid: View {
     
-    @Binding var searchViewModel: SearchViewModel
     @Binding var images: [UIImage]
     @Binding var gridSize: GridSize
     
@@ -89,7 +88,7 @@ struct ImagesGrid: View {
 
 
 #Preview {
-    ImagesGrid(searchViewModel: .constant(SearchViewModel()), images: .constant([UIImage]()), gridSize: .constant(.standard), screen: CGSize(width: 600, height: 300), isShowingFavs: false, tapAction:  {_ in
+    ImagesGrid(images: .constant([UIImage]()), gridSize: .constant(.standard), screen: CGSize(width: 600, height: 300), isShowingFavs: false, tapAction:  {_ in
         print("navigate to fullscreen")
     }, deleteAction: {_ in }, downloadAction: {_ in })
 }

@@ -18,7 +18,7 @@ struct HomeScreen: View {
                     Label("Pixnest", systemImage: K.Icons.pixnest)
                 }
             
-            FavouritesView(searchViewModel: $searchViewModel)
+            FavouritesView()
                 .tabItem {
                     Label("My Favourites", systemImage: K.Icons.favourites)
                 }
