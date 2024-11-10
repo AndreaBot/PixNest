@@ -15,6 +15,8 @@ final class SearchViewModel {
     var sortType: SortType = .relevant
     var searchResults = SearchResult(total: 0, totalPages: 0, results: [])
     
+    var imagesLoader = ImagesLoader()
+    
     var selectedImage: Result?
     
     func fetchImages(searchKey: String) async -> SearchResult {
@@ -29,15 +31,21 @@ final class SearchViewModel {
             fatalError("Invalid URL")
         }
         
+            // imagesLoader.loadingState = .loading
+        
         do {
             let (data, _) = try await URLSession.shared.data(from: searchUrl)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             if let decodedData = try? decoder.decode(SearchResult.self, from: data) {
-                results = decodedData
+                    results = decodedData
             }
         } catch {
             print(error.localizedDescription)
+        }
+        
+        if results.results.isEmpty {
+            imagesLoader.loadingState = .noResults
         }
         
         return results

@@ -2,11 +2,12 @@
 //  NavigationScreens.swift
 //  PixNest
 //
-//  Created by Andrea Bottino on 26/10/2024.
+//  Created by Andrea Bottino on 10/11/24.
 //
 
 import Foundation
 
 enum NavigationScreens {
-    case resultsView, fullscreen
+    case resultsView
+    case fullscreen
 }

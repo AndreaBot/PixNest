@@ -12,50 +12,53 @@ struct ResultsView: View {
     @Binding var searchViewModel: SearchViewModel
     @Binding var path: [NavigationScreens]
     
-    @State private var imagesLoader = ImagesLoader()
     @State private var images = [UIImage]()
     
     @AppStorage("gridSize") var gridSize: GridSize = .standard
     
     var body: some View {
         VStack {
-            Spacer()
-            if !imagesLoader.loadingIsComplete {
-                LoadingView()
-            } else {
-                GeometryReader { proxy in
-                    VStack {
-                        if searchViewModel.searchResults.results.isEmpty {
-                            ContentUnavailableView.search
-                            
-                        } else {
-                            ImagesGrid(images: $images, gridSize: $gridSize, screen: proxy.size, isShowingFavs: false) { int in
-                                searchViewModel.selectedImage = searchViewModel.searchResults.results[int]
-                                path.append(.fullscreen)
-                            } deleteAction: { _ in
-                                return
-                            } downloadAction: { _ in
-                                return
-                            }
+            switch searchViewModel.imagesLoader.loadingState {
+                
+            case .noResults:
+                ContentUnavailableView.search
+                
+            case .loading:
+                VStack {
+                    Spacer()
+                    LoadingView()
+                    Spacer()
+                }
+                
+            case .loaded:
+                VStack {
+                    GeometryReader { proxy in
+                        ImagesGrid(images: $images, gridSize: $gridSize, screen: proxy.size, isShowingFavs: false) { int in
+                            searchViewModel.selectedImage = searchViewModel.searchResults.results[int]
+                            path.append(.fullscreen)
+                        } deleteAction: { _ in
+                            return
+                        } downloadAction: { _ in
+                            return
                         }
                     }
+                    Spacer()
                 }
             }
-            Spacer()
             
-            PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.totalPages)
-                .padding()
+            if searchViewModel.imagesLoader.loadingState != .noResults {
+                PageNavigator(currentPage: $searchViewModel.pageNumber, totalPages: $searchViewModel.searchResults.totalPages)
+                    .padding()
+            }
         }
         .navigationTitle(searchViewModel.searchKeyword.capitalized)
         .navigationBarTitleDisplayMode(.inline)
         .task {
             searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
-            images = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
         }
         .onChange(of: searchViewModel.pageNumber) { oldValue, newValue in
             Task {
                 searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
-                images = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
             }
         }
         .onChange(of: searchViewModel.sortType) { oldValue, newValue in
@@ -64,7 +67,13 @@ struct ResultsView: View {
             } else {
                 Task {
                     searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
-                    images = await imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
+                }
+            }
+        }
+        .onChange(of: searchViewModel.searchResults.results) { oldValue, newValue in
+            if !searchViewModel.searchResults.results.isEmpty {
+                Task {
+                    images = await searchViewModel.imagesLoader.loadAPIImages(from: searchViewModel.searchResults.results)
                 }
             }
         }

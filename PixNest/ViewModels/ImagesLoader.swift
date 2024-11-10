@@ -13,6 +13,8 @@ final class ImagesLoader {
     var loadingIsComplete = false
     var photographerImageIsLoaded = false
     
+    var loadingState: LoadingState = .loading
+    
     func loadImage(urlString: String) async -> Data? {
         guard let url = URL(string: urlString) else {
             return nil
@@ -48,7 +50,7 @@ final class ImagesLoader {
     
     func loadAPIImages(from photoArray: [Result]) async -> [UIImage] {
         var images: [UIImage] = []
-        loadingIsComplete = false
+        loadingState = .loading
         
         for photo in photoArray {
             if let imageData = await loadImage(urlString: photo.urls.small) {
@@ -57,8 +59,7 @@ final class ImagesLoader {
                 }
             }
         }
-        
-        loadingIsComplete = true
+        loadingState = .loaded
         return images
     }
 }

@@ -8,5 +8,6 @@
 import Foundation
 
 enum AlertTriggerType {
-    case imageDownloader, coreDataManager
+    case imageDownloader
+    case coreDataManager
 }

@@ -42,3 +42,12 @@ struct URLS: Codable {
 struct Link: Codable {
     let downloadLocation: String
 }
+
+
+//MARK: - Extensions
+
+extension Result: Equatable {
+    static func == (lhs: Result, rhs: Result) -> Bool {
+        lhs.urls.full == rhs.urls.full
+    }
+}
