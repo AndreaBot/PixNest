@@ -9,11 +9,11 @@ import SwiftUI
 
 struct CustomAsyncImage: View {
     
-    @Binding var loadingBool: Bool
+    @Binding var loadingState: LoadingState
     let urlString: String
     let shape: AnyShape
     let scaleFactor: Double
-    
+
     
     var body: some View {
         AsyncImage(url: URL(string: urlString)) { phase in
@@ -29,7 +29,7 @@ struct CustomAsyncImage: View {
                         size * scaleFactor
                     }
                     .onAppear {
-                        loadingBool = true
+                        loadingState = .loaded
                     }
             case .failure(_):
                 Image(systemName: K.Icons.loadingError)

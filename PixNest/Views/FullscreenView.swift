@@ -28,15 +28,14 @@ struct FullscreenView: View {
         VStack {
             Spacer()
             
-            CustomAsyncImage(loadingBool: $imagesLoader.loadingIsComplete,
+            CustomAsyncImage(loadingState: $imagesLoader.loadingState,
                              urlString: imageResult.urls.full,
                              shape: AnyShape(RoundedRectangle(cornerRadius: 20)),
                              scaleFactor: 0.9)
             
             Spacer()
             
-            PhotoCreditsBar(loadingBool: $imagesLoader.photographerImageIsLoaded,
-                            photographerPhotoLink: imageResult.user.profileImage.medium,
+            PhotoCreditsBar(photographerPhotoLink: imageResult.user.profileImage.medium,
                             photographerName: imageResult.user.name,
                             photographerPageURL: imageResult.user.links.html,
                             openURLAction: openURL)
@@ -47,7 +46,7 @@ struct FullscreenView: View {
             coreDataManager.alertsManager = alertsManager
         }
         .toolbar {
-            if imagesLoader.loadingIsComplete {
+            if imagesLoader.loadingState == .loaded {
                 ToolbarItem(placement: .primaryAction) {
                     HStack {
                         Button("Download") {

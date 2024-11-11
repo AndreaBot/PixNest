@@ -10,9 +10,6 @@ import UIKit
 @Observable
 final class ImagesLoader {
     
-    var loadingIsComplete = false
-    var photographerImageIsLoaded = false
-    
     var loadingState: LoadingState = .loading
     
     func loadImage(urlString: String) async -> Data? {
