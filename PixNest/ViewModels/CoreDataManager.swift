@@ -34,10 +34,9 @@ final class CoreDataManager: ObservableObject {
         }
     }
     
-    func createNewEntity(id: UUID = UUID(), date: Date = Date.now, lowResLink: String, highResLink: String) {
+    func createNewEntity(id: Date = Date.now, lowResLink: String, highResLink: String) {
         let newEntity = SavedPhoto(context: container.viewContext)
         newEntity.id = id
-        newEntity.date = date
         newEntity.lowResUrl = lowResLink
         newEntity.highResUrl = highResLink
         saveData()
