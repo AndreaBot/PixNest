@@ -15,6 +15,8 @@ final class CoreDataManager: ObservableObject {
     @Published var alertsManager: AlertsManager?
     @Published var savedPhotos: [SavedPhoto] = []
     
+    
+    
     init() {
         container = NSPersistentContainer(name: "SavedPhoto")
         container.loadPersistentStores { description, error in
@@ -28,7 +30,10 @@ final class CoreDataManager: ObservableObject {
     
     func loadData() {
         do {
-            savedPhotos = try container.viewContext.fetch(SavedPhoto.fetchRequest())
+            let request = SavedPhoto.fetchRequest()
+            let sortDescriptor = NSSortDescriptor(SortDescriptor(\SavedPhoto.id, order: .reverse))
+            request.sortDescriptors = [sortDescriptor]
+            savedPhotos = try container.viewContext.fetch(request)
         } catch {
             print(error.localizedDescription)
         }
