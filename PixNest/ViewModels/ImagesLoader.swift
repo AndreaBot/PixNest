@@ -31,7 +31,7 @@ final class ImagesLoader {
     
     func loadCoreDataImages(from photoArray: [SavedPhoto]) async -> [UIImage] {
         var images: [UIImage] = []
-        loadingIsComplete = false
+        loadingState = .loading
         
         for photo in photoArray {
             guard let photoUrl = photo.lowResUrl else {
@@ -44,7 +44,7 @@ final class ImagesLoader {
             }
         }
         
-        loadingIsComplete = true
+        loadingState = .loaded
         return images
     }
     
@@ -59,6 +59,7 @@ final class ImagesLoader {
                 }
             }
         }
+        
         loadingState = .loaded
         return images
     }

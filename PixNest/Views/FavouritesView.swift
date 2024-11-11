@@ -22,30 +22,38 @@ struct FavouritesView: View {
     var body: some View {
         NavigationStack {
             GeometryReader { proxy in
-                if coreDataManager.savedPhotos.isEmpty {
+                switch imagesLoader.loadingState {
+                    
+                case .noResults:
                     ContentUnavailableView("No saved photos",
                                            systemImage: K.Icons.noFavourites,
                                            description: Text("Get busy exploring our app!"))
-                } else {
-                    if !imagesLoader.loadingIsComplete {
-                        Spacer()
-                        LoadingView()
-                        Spacer()
-                    } else {
-                        ImagesGrid(images: $images, gridSize: $gridSize, screen: proxy.size, isShowingFavs: true) { _ in
+                    
+                case .loading:
+                    Spacer()
+                    LoadingView()
+                    Spacer()
+                    
+                case .loaded:
+                    ImagesGrid(images: $images,
+                               gridSize: $gridSize,
+                               screen: proxy.size,
+                               isShowingFavs: true) { _ in
+                        return
+                    } deleteAction: { int in
+                        withAnimation {
+                            coreDataManager.deleteData(index: int)
+                            images.remove(at: int)
+                            if images.isEmpty {
+                                imagesLoader.loadingState = .noResults
+                            }
+                        }
+                    } downloadAction: { int in
+                        guard let highResLink = coreDataManager.savedPhotos[int].highResUrl else {
                             return
-                        } deleteAction: { int in
-                            withAnimation {
-                                coreDataManager.deleteData(index: int)
-                                images.remove(at: int)
-                            }
-                        } downloadAction: { int in
-                            guard let highResLink = coreDataManager.savedPhotos[int].highResUrl else {
-                                return
-                            }
-                            if let imageData = await imagesLoader.loadImage(urlString: highResLink ) {
-                                imageDownloader.download(image: UIImage(data: imageData)!)
-                            }
+                        }
+                        if let imageData = await imagesLoader.loadImage(urlString: highResLink ) {
+                            imageDownloader.download(image: UIImage(data: imageData)!)
                         }
                     }
                 }
@@ -56,7 +64,11 @@ struct FavouritesView: View {
             imageDownloader.alertsManager = alertsManager
         }
         .task {
-            images = await imagesLoader.loadCoreDataImages(from: coreDataManager.savedPhotos)
+            if coreDataManager.savedPhotos.isEmpty {
+                imagesLoader.loadingState = .noResults
+            } else {
+                images = await imagesLoader.loadCoreDataImages(from: coreDataManager.savedPhotos)
+            }
         }
         .alert(alertsManager.alertTitle, isPresented: $alertsManager.isShowingAlert) {
             Button("OK") {}
