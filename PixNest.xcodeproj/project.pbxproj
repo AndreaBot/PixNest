@@ -6,7 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		62C0433B2CE3F43F00DC4B52 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 62E0EC5C2CCD5387006BDE10 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 62E0EC632CCD5387006BDE10;
+			remoteInfo = PixNest;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		62C043372CE3F43F00DC4B52 /* PixNestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PixNestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E0EC642CCD5387006BDE10 /* PixNest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PixNest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -21,6 +32,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		62C043382CE3F43F00DC4B52 /* PixNestTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PixNestTests;
+			sourceTree = "<group>";
+		};
 		62E0EC662CCD5387006BDE10 /* PixNest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -32,6 +48,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		62C043342CE3F43F00DC4B52 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		62E0EC612CCD5387006BDE10 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				62E0EC662CCD5387006BDE10 /* PixNest */,
+				62C043382CE3F43F00DC4B52 /* PixNestTests */,
 				62E0EC652CCD5387006BDE10 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				62E0EC642CCD5387006BDE10 /* PixNest.app */,
+				62C043372CE3F43F00DC4B52 /* PixNestTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +86,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		62C043362CE3F43F00DC4B52 /* PixNestTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 62C0433D2CE3F43F00DC4B52 /* Build configuration list for PBXNativeTarget "PixNestTests" */;
+			buildPhases = (
+				62C043332CE3F43F00DC4B52 /* Sources */,
+				62C043342CE3F43F00DC4B52 /* Frameworks */,
+				62C043352CE3F43F00DC4B52 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				62C0433C2CE3F43F00DC4B52 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				62C043382CE3F43F00DC4B52 /* PixNestTests */,
+			);
+			name = PixNestTests;
+			packageProductDependencies = (
+			);
+			productName = PixNestTests;
+			productReference = 62C043372CE3F43F00DC4B52 /* PixNestTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		62E0EC632CCD5387006BDE10 /* PixNest */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 62E0EC722CCD5389006BDE10 /* Build configuration list for PBXNativeTarget "PixNest" */;
@@ -93,6 +141,10 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					62C043362CE3F43F00DC4B52 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 62E0EC632CCD5387006BDE10;
+					};
 					62E0EC632CCD5387006BDE10 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -113,11 +165,19 @@
 			projectRoot = "";
 			targets = (
 				62E0EC632CCD5387006BDE10 /* PixNest */,
+				62C043362CE3F43F00DC4B52 /* PixNestTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		62C043352CE3F43F00DC4B52 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		62E0EC622CCD5387006BDE10 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +188,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		62C043332CE3F43F00DC4B52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		62E0EC602CCD5387006BDE10 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,7 +204,51 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		62C0433C2CE3F43F00DC4B52 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 62E0EC632CCD5387006BDE10 /* PixNest */;
+			targetProxy = 62C0433B2CE3F43F00DC4B52 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		62C0433E2CE3F43F00DC4B52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L52JR8SNCR;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AndreaBottino.PixNestTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PixNest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PixNest";
+			};
+			name = Debug;
+		};
+		62C0433F2CE3F43F00DC4B52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L52JR8SNCR;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AndreaBottino.PixNestTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PixNest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PixNest";
+			};
+			name = Release;
+		};
 		62E0EC702CCD5389006BDE10 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -326,6 +437,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		62C0433D2CE3F43F00DC4B52 /* Build configuration list for PBXNativeTarget "PixNestTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				62C0433E2CE3F43F00DC4B52 /* Debug */,
+				62C0433F2CE3F43F00DC4B52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		62E0EC5F2CCD5387006BDE10 /* Build configuration list for PBXProject "PixNest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -46,6 +46,16 @@ struct Link: Codable {
 
 //MARK: - Extensions
 
+extension SearchResult: Equatable {
+    static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
+        lhs.total == rhs.total
+        &&
+        lhs.totalPages == rhs.totalPages
+        &&
+        lhs.results == rhs.results
+    }
+}
+
 extension Result: Equatable {
     static func == (lhs: Result, rhs: Result) -> Bool {
         lhs.urls.full == rhs.urls.full

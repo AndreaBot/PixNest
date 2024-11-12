@@ -31,8 +31,6 @@ final class SearchViewModel {
             fatalError("Invalid URL")
         }
         
-            // imagesLoader.loadingState = .loading
-        
         do {
             let (data, _) = try await URLSession.shared.data(from: searchUrl)
             let decoder = JSONDecoder()
