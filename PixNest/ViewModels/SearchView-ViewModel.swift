@@ -19,7 +19,7 @@ final class SearchViewModel {
     
     var selectedImage: Result?
     
-    func fetchImages(searchKey: String) async -> SearchResult {
+    func fetchImages(searchKey: String, URLSessionProvider: URLSessionProtocol) async -> SearchResult {
         let baseUrl = "https://api.unsplash.com/search/photos/?orientation=portrait"
         var results = SearchResult(total: 0, totalPages: 0, results: [])
         
@@ -32,11 +32,12 @@ final class SearchViewModel {
         }
         
         do {
-            let (data, _) = try await URLSession.shared.data(from: searchUrl)
+            print(searchUrl)
+            let (data, _) = try await URLSessionProvider.data(from: searchUrl)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             if let decodedData = try? decoder.decode(SearchResult.self, from: data) {
-                    results = decodedData
+                results = decodedData
             }
         } catch {
             print(error.localizedDescription)

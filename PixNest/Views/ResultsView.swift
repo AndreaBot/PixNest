@@ -54,11 +54,11 @@ struct ResultsView: View {
         .navigationTitle(searchViewModel.searchKeyword.capitalized)
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
+            searchViewModel.searchResults = await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword, URLSessionProvider: URLSession.shared)
         }
         .onChange(of: searchViewModel.pageNumber) { oldValue, newValue in
             Task {
-                searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
+                searchViewModel.searchResults = await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword, URLSessionProvider: URLSession.shared)
             }
         }
         .onChange(of: searchViewModel.sortType) { oldValue, newValue in
@@ -66,7 +66,7 @@ struct ResultsView: View {
                 searchViewModel.pageNumber = 1
             } else {
                 Task {
-                    searchViewModel.searchResults =  await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword)
+                    searchViewModel.searchResults = await searchViewModel.fetchImages(searchKey: searchViewModel.searchKeyword, URLSessionProvider: URLSession.shared)
                 }
             }
         }
