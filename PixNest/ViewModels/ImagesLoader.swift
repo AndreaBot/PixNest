@@ -8,17 +8,17 @@
 import UIKit
 
 @Observable
-final class ImagesLoader {
+class ImagesLoader {
     
     var loadingState: LoadingState = .loading
     
-    func loadImage(urlString: String) async -> Data? {
+    func loadImage(urlString: String, URLSessionProvider: URLSessionProvider = URLSession.shared) async -> Data? {
         guard let url = URL(string: urlString) else {
             return nil
         }
         
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
+            let (data, _) = try await URLSessionProvider.data(from: url)
             return data
         } catch {
             print(error.localizedDescription)
