@@ -25,7 +25,7 @@ final class SearchView_ViewModel_Tests: XCTestCase {
     
     //MARK: - SUPPORT FUNCTIONS
     
-    func fetchImagesTest() async -> SearchResult {
+    func fetchTestImages() async -> SearchResult {
          await searchViewModel.fetchImages(searchKey: "tree", URLSessionProvider: URLSessionMock())
     }
     
@@ -47,15 +47,15 @@ final class SearchView_ViewModel_Tests: XCTestCase {
     
     func test_fetchImages_returnsOneResult() async {
         // WHEN
-        let results = await fetchImagesTest()
+        let results = await fetchTestImages()
         
         // THEN
-        XCTAssertEqual(results.results.count, 1, "wrong number of results")
+        XCTAssertEqual(results.results.count, 1, "Wrong number of results")
     }
     
     func test_fetchImages_decodesCorrectly() async {
         //WHEN
-        let results = await fetchImagesTest()
+        let results = await fetchTestImages()
         
         // THEN
         XCTAssertEqual(results, SupportData.testSearchResult, "JSON decoding failed")

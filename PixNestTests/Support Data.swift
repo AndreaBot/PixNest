@@ -8,7 +8,7 @@
 import Foundation
 @testable import PixNest
 
-class URLSessionMock: URLSessionProtocol {
+class URLSessionMock: URLSessionProvider {
     func data(from: URL) async throws -> (Data, URLResponse) {
         let testData = Data(SupportData.testJSON.utf8)
         let response = URLResponse()
