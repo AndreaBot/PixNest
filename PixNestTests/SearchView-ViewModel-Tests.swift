@@ -47,17 +47,29 @@ final class SearchView_ViewModel_Tests: XCTestCase {
     
     func test_fetchImages_returnsOneResult() async {
         // WHEN
-        let results = await fetchTestImages()
+        let searchResults = await fetchTestImages()
         
         // THEN
-        XCTAssertEqual(results.results.count, 1, "Wrong number of results")
+        XCTAssertEqual(searchResults.results.count, 1, "Wrong number of results")
     }
     
     func test_fetchImages_decodesCorrectly() async {
         //WHEN
-        let results = await fetchTestImages()
+        let searchResults = await fetchTestImages()
         
         // THEN
-        XCTAssertEqual(results, SupportData.testSearchResult, "JSON decoding failed")
+        XCTAssertEqual(searchResults, SupportData.testSearchResult, "JSON decoding failed")
+    }
+    
+    func test_URLS_decodesCorrectly() async {
+        let searchResults = await fetchTestImages()
+        
+        XCTAssertEqual(searchResults.results[0].urls, SupportData.testUrls, "The URLs do not match")
+    }
+    
+    func test_User_decodesCorrectly() async {
+        let searchResults = await fetchTestImages()
+        
+        XCTAssertEqual(searchResults.results[0].user, SupportData.testUser, "The users do not match")
     }
 }

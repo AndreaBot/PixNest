@@ -61,3 +61,33 @@ extension Result: Equatable {
         lhs.urls.full == rhs.urls.full
     }
 }
+
+extension URLS: Equatable {
+    static func == (lhs: URLS, rhs: URLS) -> Bool {
+        lhs.small == rhs.small
+        &&
+        lhs.full == rhs.full
+    }
+}
+
+extension ProfileImage: Equatable {
+    static func == (lhs: ProfileImage, rhs: ProfileImage) -> Bool {
+        lhs.medium == rhs.medium
+    }
+}
+
+extension Links: Equatable {
+    static func == (lhs: Links, rhs: Links) -> Bool {
+        lhs.html == rhs.html
+    }
+}
+
+extension User: Equatable {
+    static func == (lhs: User, rhs: User) -> Bool {
+        lhs.name == rhs.name
+        &&
+        lhs.profileImage == rhs.profileImage
+        &&
+        lhs.links == rhs.links
+    }
+}
