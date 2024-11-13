@@ -32,7 +32,6 @@ final class SearchViewModel {
         }
         
         do {
-            print(searchUrl)
             let (data, _) = try await URLSessionProvider.data(from: searchUrl)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase

@@ -26,7 +26,7 @@ final class SearchView_ViewModel_Tests: XCTestCase {
     //MARK: - SUPPORT FUNCTIONS
     
     func fetchTestImages() async -> SearchResult {
-         await searchViewModel.fetchImages(searchKey: "tree", URLSessionProvider: URLSessionMock())
+        await searchViewModel.fetchImages(searchKey: "tree", URLSessionProvider: URLSessionMock(testData: Data(SupportData.testJSON.utf8)))
     }
     
     
@@ -54,7 +54,7 @@ final class SearchView_ViewModel_Tests: XCTestCase {
     }
     
     func test_fetchImages_decodesCorrectly() async {
-        //WHEN
+        // WHEN
         let searchResults = await fetchTestImages()
         
         // THEN
@@ -62,14 +62,28 @@ final class SearchView_ViewModel_Tests: XCTestCase {
     }
     
     func test_URLS_decodesCorrectly() async {
+        // WHEN
         let searchResults = await fetchTestImages()
         
+        // THEN
         XCTAssertEqual(searchResults.results[0].urls, SupportData.testUrls, "The URLs do not match")
     }
     
     func test_User_decodesCorrectly() async {
+        // WHEN
         let searchResults = await fetchTestImages()
         
+        // THEN
         XCTAssertEqual(searchResults.results[0].user, SupportData.testUser, "The users do not match")
     }
+    
+    func test_emptyJSON_setLoadingStateToNoResults() async {
+        // WHEN
+        let _ = await searchViewModel.fetchImages(searchKey: "hexsjjri", URLSessionProvider: URLSessionMock(testData: Data(SupportData.emptyJSON.utf8)))
+        
+        // THEN
+        XCTAssertEqual(searchViewModel.imagesLoader.loadingState, .noResults, "Te loading state does not get set correctly")
+        
+    }
+    
 }

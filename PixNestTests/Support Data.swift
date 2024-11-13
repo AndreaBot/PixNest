@@ -9,14 +9,30 @@ import Foundation
 @testable import PixNest
 
 class URLSessionMock: URLSessionProvider {
+    
+    let testData: Data
+    
+    init(testData: Data) {
+        self.testData = testData
+    }
+    
     func data(from: URL) async throws -> (Data, URLResponse) {
-        let testData = Data(SupportData.testJSON.utf8)
+        let testData = testData
         let response = URLResponse()
         return (testData, response)
     }
 }
 
 struct SupportData {
+    
+    //JSON response for no results
+    static let emptyJSON = """
+    {
+    "total": 0,
+    "total_pages": 0,
+    "results": []
+    }
+    """
     
     //JSON response for "tree" and only one image requested
     static let testJSON = """
@@ -119,21 +135,21 @@ struct SupportData {
 }
 """
     static let testUrls = URLS(small: "https://images.unsplash.com/photo-1444492696363-332accfd40c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTE5MTl8MHwxfHNlYXJjaHwxfHx0cmVlfGVufDB8MXx8fDE3MzE0NDgxOTl8MA&ixlib=rb-4.0.3&q=80&w=400",
-                        full: "https://images.unsplash.com/photo-1444492696363-332accfd40c0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w0NTE5MTl8MHwxfHNlYXJjaHwxfHx0cmVlfGVufDB8MXx8fDE3MzE0NDgxOTl8MA&ixlib=rb-4.0.3&q=85")
+                               full: "https://images.unsplash.com/photo-1444492696363-332accfd40c0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w0NTE5MTl8MHwxfHNlYXJjaHwxfHx0cmVlfGVufDB8MXx8fDE3MzE0NDgxOTl8MA&ixlib=rb-4.0.3&q=85")
     
     static let testUser = User(name: "Aaron Burden",
-                        profileImage: ProfileImage(medium: "https://images.unsplash.com/profile-1578021854441-1f6abbca2a1dimage?ixlib=rb-4.0.3&crop=faces&fit=crop&w=64&h=64"),
-                        links: Links(html: "https://unsplash.com/@aaronburden"))
+                               profileImage: ProfileImage(medium: "https://images.unsplash.com/profile-1578021854441-1f6abbca2a1dimage?ixlib=rb-4.0.3&crop=faces&fit=crop&w=64&h=64"),
+                               links: Links(html: "https://unsplash.com/@aaronburden"))
     
     static let testLink = Link(downloadLocation: "https://api.unsplash.com/photos/Bn2rzIYM53g/download?ixid=M3w0NTE5MTl8MHwxfHNlYXJjaHwxfHx0cmVlfGVufDB8MXx8fDE3MzE0NDgxOTl8MA")
- 
+    
     
     static let testResult = [Result(urls: testUrls, user: testUser, links: testLink)]
     
     static let testSearchResult: SearchResult = SearchResult(total: 10_000,
-                                                      totalPages: 10_000,
-                                                      results: testResult)
+                                                             totalPages: 10_000,
+                                                             results: testResult)
     
-   
+    
 }
 
