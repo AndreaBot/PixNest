@@ -8,34 +8,6 @@
 import Foundation
 @testable import PixNest
 
-//MARK: - TEST CLASSES
-
-class URLSessionMock: URLSessionProvider {
-    let testData: Data
-    
-    init(testData: Data) {
-        self.testData = testData
-    }
-    
-    func data(from: URL) async throws -> (Data, URLResponse) {
-        let testData = testData
-        let response = URLResponse()
-        return (testData, response)
-    }
-}
-
-class ImagesLoaderMock: ImagesLoader {
-    var onStageChange: ((LoadingState) -> Void)?
-    
-    override var loadingState: LoadingState {
-        didSet {
-            onStageChange?(loadingState)
-        }
-    }
-}
-
-
-//MARK: - SUPPORT DATA
 
 struct SupportData {
     
